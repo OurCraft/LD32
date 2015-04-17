@@ -3,6 +3,9 @@ apply plugin: 'java'
 
 sourceCompatibility = 1.8
 version = '0.1.0'
+
+// Maven Artefacts Info
+group = "org.c1"
 archivesBaseName = 'LD32'
 
 apply plugin: 'eclipse'
@@ -12,6 +15,21 @@ repositories {
     mavenCentral()
 }
 
+if (System.env.BUILD_NUMBER != null) version = "$version.$System.env.BUILD_NUMBER"
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}
+
+//force UTF-8 to the compileJava task
+compileJava.options.encoding = 'UTF-8'
+compileScala.options.encoding = 'UTF-8'
+
+tasks.withType(ScalaCompile) {
+    scalaCompileOptions.useAnt = false
+    }
+
 dependencies {
     compile 'org.scala-lang:scala-library:2.11.1'
+    compile project(':LudumEngine')
 }
