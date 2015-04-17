@@ -1,4 +1,5 @@
 apply plugin: 'scala'
+apply plugin: 'java'
 
 sourceCompatibility = 1.8
 version = '0.1.0'
@@ -12,10 +13,5 @@ repositories {
 }
 
 dependencies {
-    compile 'org.scala-lang:scala-library:2.11.6'
-    compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.3'
-    compile 'org.lwjgl.lwjgl:lwjgl:2.9.3'
-    compile 'io.netty:netty-all:4.0.25.Final'
-    compile 'com.google.guava:guava:18.0'
-    compile 'eu.thog92:lwjall:1.0.7'
+    compile 'org.scala-lang:scala-library:2.11.1'
 }
