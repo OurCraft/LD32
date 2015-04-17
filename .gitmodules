@@ -1,6 +1,3 @@
-[submodule "LWJALL"]
-	path = LWJALL
-	url = https://github.com/Thog/LWJALL.git
 [submodule "LudumEngine"]
 	path = LudumEngine
 	url = https://github.com/OurCraft/LudumEngine.git
