@@ -1,2 +1,4 @@
 rootProject.name = 'LD32'
 
+include 'LudumEngine'
+include 'LWJALL'
