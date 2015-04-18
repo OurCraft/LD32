@@ -11,6 +11,14 @@ abstract class BaguetteGui {
 
   }
 
+  def onKeyPressed(keyCode: Int, char: Char): Unit = {
+
+  }
+
+  def onScroll(x: Int, y: Int, dir: Int): Unit = {
+
+  }
+
   implicit def toTexture(texture: String): Texture = {
     new Texture(texture)
   }

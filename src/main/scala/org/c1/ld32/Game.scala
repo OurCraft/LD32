@@ -1,7 +1,7 @@
 package org.c1.ld32
 
-import org.c1.ld32.entity.{EntityBaguettePiece, EntityPlayer}
-import org.c1.ld32.gui.{GuiIngame, GuiMainMenu, GuiScreen}
+import org.c1.ld32.entity.EntityPlayer
+import org.c1.ld32.gui.{GuiMainMenu, GuiScreen}
 import org.c1.ld32.level.{BaguetteLevel, Wall}
 import org.lengine.GameBase
 import org.lengine.maths.Vec2f
@@ -63,7 +63,7 @@ object Game extends GameBase("LD32") {
 
     if (currentGui != null) currentGui.init()
 
-    openGui(new GuiIngame)
+    displayGuiScreen(new GuiMainMenu)
   }
 
   override def onKeyReleased(keyCode: Int, char: Char): Unit = {
@@ -75,7 +75,11 @@ object Game extends GameBase("LD32") {
   }
 
   override def onKeyPressed(keyCode: Int, char: Char): Unit = {
-
+    if (currentGui != null) {
+      for (element <- currentGui.elements) {
+        element.onKeyPressed(keyCode, char)
+      }
+    }
   }
 
   override def render(delta: Float): Unit = {
@@ -100,10 +104,14 @@ object Game extends GameBase("LD32") {
   }
 
   override def onScroll(x: Int, y: Int, dir: Int): Unit = {
-
+    if (currentGui != null) {
+      for (element <- currentGui.elements) {
+        element.onScroll(x, y, dir)
+      }
+    }
   }
 
-  def openGui(gui: GuiScreen): Unit = {
+  def displayGuiScreen(gui: GuiScreen): Unit = {
     currentGui = gui
     currentGui.init()
   }
