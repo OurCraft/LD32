@@ -17,12 +17,12 @@ float rand(vec2 seed) {
 
 void main() {
     vec4 sample = texture2D(diffuse, texCoords0);
-    vec4 lineColor = vec4(1/3f,0,1f/3f,1);
+    vec4 lineColor = vec4(1/3.0,0,1f/3.0,1);
 
-    float minFactor = 0.05f;
-    float maxFactor = 0.20f;
+    float minFactor = 0.05;
+    float maxFactor = 0.20;
 
-    float totalLineNumber = screenSize.y/1.5f;
+    float totalLineNumber = screenSize.y/1.5;
 
     float y = int(texCoords0.y * totalLineNumber)/totalLineNumber;
     float factor = rand(vec2(0,y)*(time)) * (maxFactor-minFactor) + minFactor;
