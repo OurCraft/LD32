@@ -45,11 +45,15 @@ object Game extends GameBase("LD32") {
     player = new EntityPlayer
     level spawn player
 
-    val baguetteTest: EntityBaguettePiece = new EntityBaguettePiece(0.5f)
-    baguetteTest.setPos(new Vec2f(300,200))
+    level.addBaguette(0.25f, 300, 200)
+    level.addBaguette(0.25f, 200, 100)
+    level.addBaguette(0.25f, 200, 200)
+    level.addBaguette(0.25f, 150, 250)
+    level.addBaguette(0.25f, 125, 300)
+
+
     player.setPos(new Vec2f(300,100))
 
-    level spawn baguetteTest
 
     level.walls.add(new Wall(new Vec2f(100,20), new Vec2f(116, 500)))
     level.walls.add(new Wall(new Vec2f(100+300,20), new Vec2f(116+300, 500)))

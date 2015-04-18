@@ -19,7 +19,6 @@ class GuiIngame extends GuiScreen {
     } else {
       val sprite: Sprite = new Sprite(texture, new TextureRegion(0,0,p,1))
       map.put(p, sprite)
-      println(s"new  $p")
       sprite
     }
   }
