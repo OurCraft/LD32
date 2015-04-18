@@ -4,13 +4,17 @@ import org.lwjgl.input.Keyboard
 import org.oc.ld32.Game
 import org.oc.ld32.gui.action.ActionHandler
 
-class GuiSelector(options: java.util.ArrayList[String], x: Int, y: Int) extends BaguetteGui {
+class GuiSelector(val options: java.util.ArrayList[String], x: Int, y: Int) extends BaguetteGui {
   var selectedIndex: Int = 0
 
+  var shouldRender = true
+
   def render(delta: Float): Unit = {
-    for (i <- 0 until options.size()) {
-      if (selectedIndex == i) fontRenderer.renderString("> " + options.get(i), x, y - i * 30, 0xFFFFFFFF)
-      else fontRenderer.renderString(options.get(i), x, y - i * 30, 0xFFFFFFFF)
+    if (shouldRender) {
+      for (i <- 0 until options.size()) {
+        if (selectedIndex == i) fontRenderer.renderString("> " + options.get(i), x, y - i * 30, 0xFFFFFFFF)
+        else fontRenderer.renderString(options.get(i), x, y - i * 30, 0xFFFFFFFF)
+      }
     }
   }
 

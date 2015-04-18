@@ -1,6 +1,6 @@
 package org.oc.ld32
 
-import org.oc.ld32.gui.GuiIngame
+import org.oc.ld32.gui.{GuiMainMenu, GuiIngame, GuiScreen}
 import org.oc.ld32.input.{Controls, LogitechMapping}
 import org.oc.ld32.level.BaguetteLevel
 import org.lengine.GameBase
@@ -8,7 +8,6 @@ import org.lengine.maths.Vec2f
 import org.lengine.render.{Shader, RenderEngine, FontRenderer, TextureAtlas}
 import org.lwjgl.input.{Mouse, Controller, Keyboard}
 import org.oc.ld32.entity.EntityPlayer
-import org.oc.ld32.gui.{GuiIngame, GuiScreen}
 import org.oc.ld32.level.{BaguetteLevel, LevelLoader}
 
 import scala.collection.JavaConversions._
@@ -24,31 +23,33 @@ object Game extends GameBase("Baguettes") {
   override def getBaseHeight: Int = 640
 
   override def update(delta: Float): Unit = {
-    level.update(delta)
+    if (level != null) {
+      level.update(delta)
 
-    if(!usingGamepad) {
-      if (isKeyPressed(Keyboard.KEY_LEFT)) {
-        player.walkLeft(delta)
-      }
-      if (isKeyPressed(Keyboard.KEY_RIGHT)) {
-        player.walkRight(delta)
-      }
-      if (isKeyPressed(Keyboard.KEY_UP)) {
-        player.walkUp(delta)
-      }
-      if (isKeyPressed(Keyboard.KEY_DOWN)) {
-        player.walkDown(delta)
-      }
-      val mousePos = player.getPos - new Vec2f(Mouse.getX, Mouse.getY)
-      player.setAngle(Math.atan2(mousePos.y, mousePos.x).toFloat)
-    } else {
-      player.walkRight(delta, getAxisValue(Controls.MOVE_X))
-      player.walkUp(delta, -getAxisValue(Controls.MOVE_Y))
+      if (!usingGamepad) {
+        if (isKeyPressed(Keyboard.KEY_LEFT)) {
+          player.walkLeft(delta)
+        }
+        if (isKeyPressed(Keyboard.KEY_RIGHT)) {
+          player.walkRight(delta)
+        }
+        if (isKeyPressed(Keyboard.KEY_UP)) {
+          player.walkUp(delta)
+        }
+        if (isKeyPressed(Keyboard.KEY_DOWN)) {
+          player.walkDown(delta)
+        }
+        val mousePos = player.getPos - new Vec2f(Mouse.getX, Mouse.getY)
+        player.setAngle(Math.atan2(mousePos.y, mousePos.x).toFloat)
+      } else {
+        player.walkRight(delta, getAxisValue(Controls.MOVE_X))
+        player.walkUp(delta, -getAxisValue(Controls.MOVE_Y))
 
-      val lookX = getAxisValue(Controls.LOOK_X)
-      val lookY = getAxisValue(Controls.LOOK_Y)
-      val angle = Math.atan2(lookY, -lookX)
-      player.setAngle(angle.toFloat)
+        val lookX = getAxisValue(Controls.LOOK_X)
+        val lookY = getAxisValue(Controls.LOOK_Y)
+        val angle = Math.atan2(lookY, -lookX)
+        player.setAngle(angle.toFloat)
+      }
     }
   }
 
@@ -57,11 +58,8 @@ object Game extends GameBase("Baguettes") {
 
     fontRenderer = new FontRenderer(new TextureAtlas("assets/textures/font.png", 16, 16))
 
-    loadLevel("testLevel0", true)
-
     if (currentGui != null) currentGui.init()
-
-    displayGuiScreen(new GuiIngame)
+    displayGuiScreen(new GuiMainMenu)
   }
 
   def loadLevel(id: String, reloadMusic: Boolean = false): Unit = {
@@ -72,7 +70,7 @@ object Game extends GameBase("Baguettes") {
     player setPos level.spawnpoint
 
     if(reloadMusic && level.music != null) {
-   //   soundManager.play("musics/"+level.music+".ogg")
+      soundManager.play("musics/"+level.music+".ogg")
     }
   }
 
@@ -95,11 +93,13 @@ object Game extends GameBase("Baguettes") {
 
   override def render(delta: Float): Unit = {
     RenderEngine.clearColorBuffer(1f/15f,1f/40f,1f/20f,1)
-    level.render(delta)
+    if(level != null ) {
+      level.render(delta)
+      val x: Float = player.getPos.x
+      val y: Float = player.getPos.y
+      fontRenderer.renderString(s"pos: $x, $y", 0, getBaseHeight-17, 0xFFFFFFF, 1)
+    }
     fontRenderer.renderString("LD32: An Unconventional Weapon", 0, getBaseHeight-17-16, 0xFFFFFFF, 1)
-    val x: Float = player.getPos.x
-    val y: Float = player.getPos.y
-    fontRenderer.renderString(s"pos: $x, $y", 0, getBaseHeight-17, 0xFFFFFFF, 1)
     if (currentGui != null) currentGui.render(delta)
   }
 
