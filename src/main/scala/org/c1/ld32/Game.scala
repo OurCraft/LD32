@@ -41,7 +41,7 @@ object Game extends GameBase("LD32") {
 
   override def render(delta: Float): Unit = {
     level.render(delta)
-    fontRenderer.renderString("LD32: An Unconventional Weapon", 0, 0, 0xFF00FFFF, 2)
+    fontRenderer.renderString("LD32: An Unconventional Weapon", 0, getBaseHeight-17, 0xFFFFFFF, 1)
   }
 
   override def onMousePressed(x: Int, y: Int, button: Int): Unit = {

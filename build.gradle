@@ -5,7 +5,7 @@ sourceCompatibility = 1.8
 version = '0.1.0'
 
 // Maven Artefacts Info
-group = "org.c1"
+group = "org.oc.ld32"
 archivesBaseName = 'LD32'
 
 apply plugin: 'eclipse'
