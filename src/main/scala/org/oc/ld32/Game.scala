@@ -82,10 +82,16 @@ object Game extends GameBase("Baguettes") {
   }
 
   override def onKeyReleased(keyCode: Int, char: Char): Unit = {
+    if (currentGui != null) {
+      currentGui.onKeyReleased(keyCode, char)
+    }
     usingGamepad = false
   }
 
   override def onMouseMoved(x: Int, y: Int, dx: Int, dy: Int): Unit = {
+    if (currentGui != null) {
+      currentGui.onMouseMove(x,y,dx,dy)
+    }
     usingGamepad = false
   }
 
@@ -119,7 +125,9 @@ object Game extends GameBase("Baguettes") {
   }
 
   override def onMouseReleased(x: Int, y: Int, button: Int): Unit = {
-
+    if (currentGui != null) {
+      currentGui.onMouseReleased(x, y, button)
+    }
   }
 
   override def onScroll(x: Int, y: Int, dir: Int): Unit = {

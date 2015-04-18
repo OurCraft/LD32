@@ -11,7 +11,19 @@ abstract class BaguetteGui {
 
   }
 
+  def onMouseReleased(x: Int, y: Int, button: Int): Unit = {
+
+  }
+
+  def onKeyReleased(keyCode: Int, char: Char): Unit = {
+
+  }
+
   def onKeyPressed(keyCode: Int, char: Char): Unit = {
+
+  }
+
+  def onMouseMove(x: Int, y: Int, dx: Int, dy: Int) = {
 
   }
 

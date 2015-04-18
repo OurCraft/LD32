@@ -20,8 +20,12 @@
   ],
 
   "floor": [
-    {"texture": "tiles", "x": 116, "y": 36, "width": 136, "height": 448},
-    {"texture": "wood", "x": 268, "y": 36, "width": 136, "height": 448}
+    {"texture": "planks", "x": 116, "y": 36, "width": 136, "height": 448},
+    {"texture": "carpet", "x": 268, "y": 36, "width": 136, "height": 448}
+  ],
+
+  "enemies": [
+    {"id": "black_suit", "x": 118, "y": 38, "ai": "patrol"}
   ],
 
   "followingLevel": "testLevel1",
