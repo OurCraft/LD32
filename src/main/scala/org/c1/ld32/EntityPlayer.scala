@@ -12,6 +12,6 @@ class EntityPlayer extends Entity {
   }
 
   override def update(delta: Float): Unit = {
-    
+
   }
 }
