@@ -42,13 +42,20 @@ object Game extends GameBase("Baguettes") {
         val mousePos = player.getPos - new Vec2f(Mouse.getX, Mouse.getY)
         player.setAngle(Math.atan2(mousePos.y, mousePos.x).toFloat)
       } else {
-        player.walkRight(delta, getAxisValue(Controls.MOVE_X))
-        player.walkUp(delta, -getAxisValue(Controls.MOVE_Y))
+        val threshold = 0.10
+        val xMove = getAxisValue(Controls.MOVE_X)
+        if(Math.abs(xMove) >= threshold)
+          player.walkRight(delta, xMove)
+
+        val yMove = -getAxisValue(Controls.MOVE_Y)
+        if(Math.abs(yMove) >= threshold)
+          player.walkUp(delta, yMove)
 
         val lookX = getAxisValue(Controls.LOOK_X)
         val lookY = getAxisValue(Controls.LOOK_Y)
         val angle = Math.atan2(lookY, -lookX)
-        player.setAngle(angle.toFloat)
+        if(Math.abs(lookX) >= threshold || Math.abs(lookY) >= threshold)
+          player.setAngle(angle.toFloat)
       }
     }
   }
@@ -130,7 +137,7 @@ object Game extends GameBase("Baguettes") {
 
   override def onAxisMoved(value: Float, index: Int, source: Controller): Unit = {
     // TODO: Use for mappings
-    println(s"$value $index")
+  //  println(s"$value $index")
     usingGamepad = true
   }
 

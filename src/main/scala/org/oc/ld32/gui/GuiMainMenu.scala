@@ -71,7 +71,7 @@ class GuiMainMenu extends GuiScreen with ActionHandler {
     }
     for(i <- 0 until trail.size) {
       val trailPart = trail.get(i)
-      trailPart.setPos(trailPart.getPos.x-2f*delta*60f, trailPart.getPos.y)
+      trailPart.setPos(trailPart.getPos.x-1f*delta*60f, trailPart.getPos.y)
       if(trailPart.getPos().x+trailPart.width < 0f) {
         if(trailPart.texture == original.texture)
           unused.add(trailPart)
@@ -107,6 +107,7 @@ class GuiMainMenu extends GuiScreen with ActionHandler {
     if (source == selector) {
       if (id == 0) {
         Game.displayGuiScreen(new GuiIngame)
+        Game.loadLevel("testLevel0", true)
       } else if (id == 1) {
         //todo
       } else if (id == 2) {

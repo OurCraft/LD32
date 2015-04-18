@@ -24,6 +24,8 @@
     {"texture": "wood", "x": 268, "y": 36, "width": 136, "height": 448}
   ],
 
+  "followingLevel": "testLevel1",
+
   "music": "Night Shift - Möbius",
 
   "spawnpoint": [300, 100]
