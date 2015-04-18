@@ -24,6 +24,10 @@ object LevelLoader {
     val wallArray: JsonArray = levelData.getAsJsonArray("walls")
     for(i <- 0 until wallArray.size) {
       val wallData: JsonObject = wallArray.get(i).getAsJsonObject
+      var id = ""
+      if(wallData.get("texture") != null)
+        id = wallData.get("texture").getAsString
+      
       val x = wallData.get("x").getAsFloat
       val y = wallData.get("y").getAsFloat
       val length = wallData.get("length").getAsFloat
@@ -38,7 +42,7 @@ object LevelLoader {
         maxX += length
         maxY += 16f
       }
-      val wall: Wall = new Wall(new Vec2f(x,y), new Vec2f(maxX,maxY))
+      val wall: Wall = new Wall(id, new Vec2f(x,y), new Vec2f(maxX,maxY))
       level.walls.add(wall)
     }
   }
