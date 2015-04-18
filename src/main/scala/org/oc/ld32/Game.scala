@@ -77,7 +77,7 @@ object Game extends GameBase("Baguettes") {
     player setPos level.spawnpoint
 
     if(reloadMusic && level.music != null) {
-      soundManager.play("musics/"+level.music+".ogg")
+    //  soundManager.play("musics/"+level.music+".ogg")
     }
   }
 

@@ -25,10 +25,19 @@ class AIPatrol(priority: Int, entity: EntityBiped) extends AITask(priority, enti
     if(index < 0)
       index = list.length+index-1
 
+    list(index) match {
+      case LEFT => entity.setAngle(0)
+
+      case RIGHT => entity.setAngle(Math.PI.toFloat)
+
+      case UP => entity.setAngle((-Math.PI/2f).toFloat)
+
+      case DOWN => entity.setAngle((Math.PI/2f).toFloat)
+    }
   }
 
   override def perform(delta: Float): Unit = {
-    index match {
+    list(index) match {
       case LEFT => {
         if(!entity.walkLeft(delta)) {
           nextDirection

@@ -2,7 +2,7 @@ package org.oc.ld32.entity
 
 import java.util.{List, ArrayList}
 
-abstract class EntityEnemy(id: String) extends EntityBiped(id) {
+class EntityEnemy(id: String) extends EntityBiped(id) {
   val aiList: List[AITask] = new ArrayList[AITask]
 
   def updateAITasks(delta: Float): Unit = {
@@ -21,5 +21,9 @@ abstract class EntityEnemy(id: String) extends EntityBiped(id) {
         }
       }
     }
+  }
+  override def update(delta: Float): Unit = {
+    updateAITasks(delta)
+    super.update(delta)
   }
 }

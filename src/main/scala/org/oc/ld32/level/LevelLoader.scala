@@ -3,7 +3,7 @@ package org.oc.ld32.level
 import com.google.gson.{JsonArray, JsonObject, Gson}
 import org.lengine.maths.Vec2f
 import org.lengine.utils.IOUtils
-import org.oc.ld32.entity.EntityBaguettePiece
+import org.oc.ld32.entity.{Tasks, EntityEnemy, EntityBaguettePiece}
 
 object LevelLoader {
 
@@ -61,6 +61,22 @@ object LevelLoader {
     }
   }
 
+  def handleEnemies(level: BaguetteLevel, enemiesData: JsonArray) = {
+    for(i <- 0 until enemiesData.size) {
+      val enemyObject = enemiesData.get(i).getAsJsonObject
+      val id = enemyObject.get("id").getAsString
+      val x = enemyObject.get("x").getAsFloat
+      val y = enemyObject.get("y").getAsFloat
+      val aiType = enemyObject.get("ai").getAsString
+      val enemy = new EntityEnemy(id)
+      enemy.setPos(new Vec2f(x, y))
+      val task = Tasks.createFromID(enemy, aiType)
+      enemy.aiList.add(task)
+
+      level spawn enemy
+    }
+  }
+
   def load(id: String): BaguetteLevel = {
     val level: BaguetteLevel = new BaguetteLevel
     val json: String = IOUtils.read(s"assets/levels/$id.json", "UTF-8")
@@ -86,6 +102,11 @@ object LevelLoader {
 
     if(levelData.has("music")) {
       level.music = levelData.get("music").getAsString
+    }
+
+    if(levelData.has("enemies")) {
+      val enemiesData = levelData.get("enemies").getAsJsonArray
+      handleEnemies(level, enemiesData)
     }
     level
   }
