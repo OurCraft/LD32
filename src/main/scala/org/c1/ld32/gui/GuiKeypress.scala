@@ -6,7 +6,7 @@ import org.lwjgl.input.Keyboard
 
 class GuiKeypress(key: Int, text: String, x: Int, y: Int) extends BaguetteGui {
   def render(delta: Float): Unit = {
-    fontRenderer.renderString(Keyboard.getKeyName(key) + "> " + text, x, y, 0xffffff)
+    fontRenderer.renderString(Keyboard.getKeyName(key) + "> " + text, x, y, 0xffffffff)
   }
 
   override def onKeyPressed(keyCode: Int, char: Char): Unit = {
