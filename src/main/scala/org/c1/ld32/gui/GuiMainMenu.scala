@@ -1,20 +1,25 @@
 package org.c1.ld32.gui
 
-import org.c1.ld32.Game
+import java.util
+
 import org.c1.ld32.gui.action.ActionHandler
-import org.lwjgl.input.Keyboard
 
 class GuiMainMenu extends GuiScreen with ActionHandler {
   def init(): Unit = {
-    elements.add(new GuiLabel("Main Menu", 10, 30))
-    elements.add(new GuiKeypress(Keyboard.KEY_S, "Start Game", 10, 10))
+    elements.add(new GuiLabel("Main Menu", 10, 90))
+
+    val list = new util.ArrayList[String]()
+    list.add("Start new game")
+    list.add("Goto level")
+    list.add("Quit game")
+    elements.add(new GuiSelector(list, 10, 60))
   }
 
   def renderScreen(delta: Float): Unit = {
 
   }
 
-  def onAction(id: Int): Unit = {
-    Game displayGuiScreen new GuiIngame
+  def onAction(source: Object, id: Int): Unit = {
+    println("User clicked option " + id)
   }
 }
