@@ -1,4 +1,4 @@
-package org.c1.ld32.level
+package org.oc.ld32.level
 
 import org.lengine.render.{TextureRegion, Sprite, Texture}
 

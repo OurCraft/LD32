@@ -1,8 +1,8 @@
-package org.c1.ld32.gui
+package org.oc.ld32.gui
 
-import org.c1.ld32.Game
-import org.c1.ld32.gui.action.ActionHandler
 import org.lwjgl.input.Keyboard
+import org.oc.ld32.Game
+import org.oc.ld32.gui.action.ActionHandler
 
 class GuiSelector(options: java.util.ArrayList[String], x: Int, y: Int) extends BaguetteGui {
   var selectedIndex: Int = 0

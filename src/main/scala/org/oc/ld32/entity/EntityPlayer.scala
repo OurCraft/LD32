@@ -1,7 +1,7 @@
-package org.c1.ld32.entity
+package org.oc.ld32.entity
 
-import org.c1.ld32.level.BaguetteLevel
 import org.lengine.render.{Sprite, Texture}
+import org.oc.ld32.level.BaguetteLevel
 
 class EntityPlayer extends BaguetteEntity {
 

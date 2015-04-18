@@ -1,4 +1,4 @@
-package org.c1.ld32.entity
+package org.oc.ld32.entity
 
 import org.lengine.render.{Sprite, Texture}
 

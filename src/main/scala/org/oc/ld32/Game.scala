@@ -1,12 +1,14 @@
-package org.c1.ld32
+package org.oc.ld32
 
-import org.c1.ld32.entity.EntityPlayer
-import org.c1.ld32.gui.{GuiIngame, GuiMainMenu, GuiScreen}
-import org.c1.ld32.level.{LevelLoader, BaguetteLevel, Wall}
+import org.oc.ld32.gui.GuiIngame
+import org.oc.ld32.level.BaguetteLevel
 import org.lengine.GameBase
 import org.lengine.maths.Vec2f
 import org.lengine.render.{FontRenderer, TextureAtlas}
 import org.lwjgl.input.Keyboard
+import org.oc.ld32.entity.EntityPlayer
+import org.oc.ld32.gui.{GuiIngame, GuiScreen}
+import org.oc.ld32.level.{BaguetteLevel, LevelLoader}
 
 import scala.collection.JavaConversions._
 

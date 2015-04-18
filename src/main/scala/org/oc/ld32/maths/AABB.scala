@@ -1,4 +1,4 @@
-package org.c1.ld32.maths
+package org.oc.ld32.maths
 
 class AABB(var x: Float = 0, var y: Float = 0, var width: Float, var height: Float) {
 

@@ -1,9 +1,9 @@
-package org.c1.ld32.level
+package org.oc.ld32.level
 
 import com.google.gson.{JsonArray, JsonObject, Gson}
-import org.c1.ld32.entity.EntityBaguettePiece
 import org.lengine.maths.Vec2f
 import org.lengine.utils.IOUtils
+import org.oc.ld32.entity.EntityBaguettePiece
 
 object LevelLoader {
 

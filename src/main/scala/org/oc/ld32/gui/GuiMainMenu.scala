@@ -1,8 +1,7 @@
-package org.c1.ld32.gui
+package org.oc.ld32.gui
 
 import java.util
-
-import org.c1.ld32.gui.action.ActionHandler
+import org.oc.ld32.gui.action.ActionHandler
 
 class GuiMainMenu extends GuiScreen with ActionHandler {
   def init(): Unit = {

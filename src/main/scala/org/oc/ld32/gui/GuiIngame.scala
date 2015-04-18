@@ -1,9 +1,8 @@
-package org.c1.ld32.gui
+package org.oc.ld32.gui
 
 import java.util.{HashMap, Map}
-
-import org.c1.ld32.Game
 import org.lengine.render.{TextureRegion, Sprite, Texture}
+import org.oc.ld32.Game
 
 class GuiIngame extends GuiScreen {
 

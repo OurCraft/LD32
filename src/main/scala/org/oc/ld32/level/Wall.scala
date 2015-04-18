@@ -1,8 +1,8 @@
-package org.c1.ld32.level
+package org.oc.ld32.level
 
-import org.c1.ld32.maths.AABB
 import org.lengine.maths.Vec2f
 import org.lengine.render.{TextureRegion, Sprite, Texture}
+import org.oc.ld32.maths.AABB
 
 class Wall(val start: Vec2f, val end: Vec2f) {
 
