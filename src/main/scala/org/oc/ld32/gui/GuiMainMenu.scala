@@ -3,6 +3,7 @@ package org.oc.ld32.gui
 import java.util
 import org.lengine.maths.Quaternion
 import org.lengine.render.{RenderEngine, Sprite}
+import org.oc.ld32.Game
 import org.oc.ld32.gui.action.ActionHandler
 
 class GuiMainMenu extends GuiScreen with ActionHandler {
@@ -103,6 +104,14 @@ class GuiMainMenu extends GuiScreen with ActionHandler {
   }
 
   def onAction(source: Object, id: Int): Unit = {
-    println("User clicked option " + id)
+    if (source == selector) {
+      if (id == 0) {
+        Game.displayGuiScreen(new GuiIngame)
+      } else if (id == 1) {
+        //todo
+      } else if (id == 2) {
+        System.exit(1)
+      }
+    }
   }
 }
