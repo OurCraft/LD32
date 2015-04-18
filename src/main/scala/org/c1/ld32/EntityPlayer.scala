@@ -1,8 +1,6 @@
 package org.c1.ld32
 
-import org.lengine.entity.Entity
-
-class EntityPlayer extends Entity {
+class EntityPlayer extends BaguetteEntity {
   override def render(delta: Float): Unit = {
 
   }

@@ -12,4 +12,16 @@ class BaguetteLevel extends Level {
     // TODO: Render walls
   }
 
+  def canGoTo(aabb: AABB, x: Float, y: Float): Boolean = {
+    val n: Int = walls.size
+    val bbCopy: AABB = new AABB(x,y, aabb.width, aabb.height)
+    for(i <- 0 until n) {
+      val w: Wall = walls.get(i)
+      if(w.boundingBox.collides(bbCopy)) {
+        return false
+      }
+    }
+    true
+  }
+
 }
