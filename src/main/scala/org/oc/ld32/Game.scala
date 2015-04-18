@@ -5,7 +5,7 @@ import org.oc.ld32.input.{Controls, LogitechMapping}
 import org.oc.ld32.level.BaguetteLevel
 import org.lengine.GameBase
 import org.lengine.maths.Vec2f
-import org.lengine.render.{RenderEngine, FontRenderer, TextureAtlas}
+import org.lengine.render.{Shader, RenderEngine, FontRenderer, TextureAtlas}
 import org.lwjgl.input.{Mouse, Controller, Keyboard}
 import org.oc.ld32.entity.EntityPlayer
 import org.oc.ld32.gui.{GuiIngame, GuiScreen}
@@ -53,6 +53,8 @@ object Game extends GameBase("Baguettes") {
   }
 
   override def initGame: Unit = {
+    postProcessShader = new Shader("assets/shaders/base.vsh", "assets/shaders/postProcess.fsh")
+
     fontRenderer = new FontRenderer(new TextureAtlas("assets/textures/font.png", 16, 16))
 
     loadLevel("testLevel0", true)
@@ -92,6 +94,7 @@ object Game extends GameBase("Baguettes") {
   }
 
   override def render(delta: Float): Unit = {
+    RenderEngine.clearColorBuffer(1f/15f,1f/40f,1f/20f,1)
     level.render(delta)
     fontRenderer.renderString("LD32: An Unconventional Weapon", 0, getBaseHeight-17-16, 0xFFFFFFF, 1)
     val x: Float = player.getPos.x
