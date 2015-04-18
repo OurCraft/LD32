@@ -6,4 +6,9 @@ object LogitechMapping {
 
   val RIGHT_X_AXIS = 1
   val RIGHT_Y_AXIS = 0
+
+  val RIGHT_TOP_TRIGGER = 5
+  val LEFT_TOP_TRIGGER = 4
+  val RIGHT_BOTTOM_TRIGGER = 7
+  val LEFT_BOTTOM_TRIGGER = 6
 }

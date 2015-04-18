@@ -5,8 +5,8 @@ import org.oc.ld32.input.{Controls, LogitechMapping}
 import org.oc.ld32.level.BaguetteLevel
 import org.lengine.GameBase
 import org.lengine.maths.Vec2f
-import org.lengine.render.{FontRenderer, TextureAtlas}
-import org.lwjgl.input.{Controller, Keyboard}
+import org.lengine.render.{RenderEngine, FontRenderer, TextureAtlas}
+import org.lwjgl.input.{Mouse, Controller, Keyboard}
 import org.oc.ld32.entity.EntityPlayer
 import org.oc.ld32.gui.{GuiIngame, GuiScreen}
 import org.oc.ld32.level.{BaguetteLevel, LevelLoader}
@@ -39,9 +39,16 @@ object Game extends GameBase("Baguettes") {
       if (isKeyPressed(Keyboard.KEY_DOWN)) {
         player.walkDown(delta)
       }
+      val mousePos = player.getPos - new Vec2f(Mouse.getX, Mouse.getY)
+      player.setAngle(Math.atan2(mousePos.y, mousePos.x).toFloat)
     } else {
       player.walkRight(delta, getAxisValue(Controls.MOVE_X))
       player.walkUp(delta, -getAxisValue(Controls.MOVE_Y))
+
+      val lookX = getAxisValue(Controls.LOOK_X)
+      val lookY = getAxisValue(Controls.LOOK_Y)
+      val angle = Math.atan2(lookY, -lookX)
+      player.setAngle(angle.toFloat)
     }
   }
 
@@ -118,8 +125,9 @@ object Game extends GameBase("Baguettes") {
     currentGui.init()
   }
 
-  override def onAxisMoved(x: Float, y: Float, index: Int, source: Controller): Unit = {
+  override def onAxisMoved(value: Float, index: Int, source: Controller): Unit = {
     // TODO: Use for mappings
+    println(s"$value $index")
     usingGamepad = true
   }
 

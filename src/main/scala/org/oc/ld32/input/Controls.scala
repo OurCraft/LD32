@@ -7,4 +7,7 @@ object Controls {
 
   var LOOK_X = LogitechMapping.RIGHT_X_AXIS
   var LOOK_Y = LogitechMapping.RIGHT_Y_AXIS
+
+  var ATTACK = LogitechMapping.RIGHT_TOP_TRIGGER
+  var THROW = LogitechMapping.LEFT_TOP_TRIGGER
 }

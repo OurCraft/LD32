@@ -10,12 +10,14 @@ class EntityPlayer extends BaguetteEntity {
 
   override def render(delta: Float): Unit = {
     sprite.setPos(getPos.x, getPos.y)
-    sprite.setAngle(getAngle)
+    sprite.setAngle((getAngle - Math.PI/2f).toFloat)
     sprite.render(delta)
   }
 
   override def init: Unit = {
     super.init
+    boundingBox.width = 32f
+    boundingBox.height = 32f
   }
 
   override def update(delta: Float): Unit = {
