@@ -2,12 +2,13 @@ package org.c1.ld32
 
 import org.c1.ld32.entity.EntityPlayer
 import org.c1.ld32.gui.{GuiMainMenu, GuiScreen}
-import org.c1.ld32.level.{Wall, BaguetteLevel}
+import org.c1.ld32.level.{BaguetteLevel, Wall}
 import org.lengine.GameBase
-import org.lengine.level.Level
 import org.lengine.maths.Vec2f
 import org.lengine.render.{FontRenderer, TextureAtlas}
 import org.lwjgl.input.Keyboard
+
+import scala.collection.JavaConversions._
 
 object Game extends GameBase("LD32") {
 
@@ -79,7 +80,11 @@ object Game extends GameBase("LD32") {
   }
 
   override def onMousePressed(x: Int, y: Int, button: Int): Unit = {
-
+    if (currentGui != null) {
+      for (element <- currentGui.elements) {
+        element.onMousePressed(x, y, button)
+      }
+    }
   }
 
   override def onMouseReleased(x: Int, y: Int, button: Int): Unit = {

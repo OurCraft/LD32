@@ -6,4 +6,8 @@ abstract class BaguetteGui {
   var fontRenderer = new FontRenderer(new TextureAtlas(new Texture("assets/textures/font.png"), 16, 16))
 
   def render(delta: Float): Unit
+
+  def onMousePressed(x: Int, y: Int, button: Int): Unit = {
+
+  }
 }
