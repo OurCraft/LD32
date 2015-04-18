@@ -17,7 +17,7 @@ float rand(vec2 seed) {
 
 void main() {
     vec4 sample = texture2D(diffuse, texCoords0);
-    vec4 lineColor = vec4(1/3.0,0,1f/3.0,1);
+    vec4 lineColor = vec4(1.0/3.0,0,1.0/3.0,1);
 
     float minFactor = 0.05;
     float maxFactor = 0.20;
