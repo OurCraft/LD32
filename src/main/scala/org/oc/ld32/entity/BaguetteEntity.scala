@@ -7,7 +7,7 @@ abstract class BaguetteEntity extends Entity {
 
   var boundingBox: AABB = _
 
-  override def init(): Unit = {
+  override def init: Unit = {
     boundingBox = new AABB(0,0,16,16)
   }
 
