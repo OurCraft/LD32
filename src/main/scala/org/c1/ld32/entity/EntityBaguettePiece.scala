@@ -19,8 +19,8 @@ class EntityBaguettePiece(val value: Float) extends BaguetteEntity {
 
   override def init: Unit = {
     super.init
-    boundingBox.width = 16f
-    boundingBox.height = 16f
+    boundingBox.width = 32f
+    boundingBox.height = 32f
   }
 
   override def onCollide(other: BaguetteEntity): Unit = {

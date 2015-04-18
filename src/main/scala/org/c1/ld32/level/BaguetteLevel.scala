@@ -9,6 +9,10 @@ import org.lengine.maths.Vec2f
 
 class BaguetteLevel extends Level {
 
+  var music: String = null
+
+  var spawnpoint: Vec2f = _
+
   def addBaguette(value: Float, x: Float, y: Float): Unit = {
     val baguettePiece: EntityBaguettePiece = new EntityBaguettePiece(value)
     baguettePiece.setPos(new Vec2f(x,y))
@@ -17,6 +21,7 @@ class BaguetteLevel extends Level {
 
 
   val walls: List[Wall] = new ArrayList[Wall]
+  val floorDecorations: List[FloorDecoration] = new ArrayList
 
   override def update(delta: Float): Unit = {
     super.update(delta)
@@ -42,6 +47,10 @@ class BaguetteLevel extends Level {
   }
 
   override def render(delta: Float): Unit = {
+    for(i <- 0 until floorDecorations.size) {
+      floorDecorations.get(i).render(delta)
+    }
+
     super.render(delta)
 
     val n: Int = walls.size

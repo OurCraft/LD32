@@ -1,8 +1,8 @@
 package org.c1.ld32
 
 import org.c1.ld32.entity.EntityPlayer
-import org.c1.ld32.gui.{GuiMainMenu, GuiScreen}
-import org.c1.ld32.level.{BaguetteLevel, Wall}
+import org.c1.ld32.gui.{GuiIngame, GuiMainMenu, GuiScreen}
+import org.c1.ld32.level.{LevelLoader, BaguetteLevel, Wall}
 import org.lengine.GameBase
 import org.lengine.maths.Vec2f
 import org.lengine.render.{FontRenderer, TextureAtlas}
@@ -10,7 +10,7 @@ import org.lwjgl.input.Keyboard
 
 import scala.collection.JavaConversions._
 
-object Game extends GameBase("LD32") {
+object Game extends GameBase("Baguettes") {
 
   var level: BaguetteLevel = _
 
@@ -41,29 +41,23 @@ object Game extends GameBase("LD32") {
   override def initGame: Unit = {
     fontRenderer = new FontRenderer(new TextureAtlas("assets/textures/font.png", 16, 16))
 
-    level = new BaguetteLevel
-    player = new EntityPlayer
-    level spawn player
-
-    level.addBaguette(0.25f, 300, 200)
-    level.addBaguette(0.25f, 200, 100)
-    level.addBaguette(0.25f, 200, 200)
-    level.addBaguette(0.25f, 150, 250)
-    level.addBaguette(0.25f, 125, 300)
-
-
-    player.setPos(new Vec2f(300,100))
-
-
-    level.walls.add(new Wall(new Vec2f(100,20), new Vec2f(116, 500)))
-    level.walls.add(new Wall(new Vec2f(100+300,20), new Vec2f(116+300, 500)))
-
-    level.walls.add(new Wall(new Vec2f(100,20), new Vec2f(116+300, 36)))
-    level.walls.add(new Wall(new Vec2f(100,484), new Vec2f(116+300, 500)))
+    loadLevel("testLevel0", true)
 
     if (currentGui != null) currentGui.init()
 
-    displayGuiScreen(new GuiMainMenu)
+    displayGuiScreen(new GuiIngame)
+  }
+
+  def loadLevel(id: String, reloadMusic: Boolean = false): Unit = {
+    level = LevelLoader.load(id)
+    player = new EntityPlayer
+    level spawn player
+
+    player setPos level.spawnpoint
+
+    if(reloadMusic && level.music != null) {
+      soundManager.play("musics/"+level.music+".ogg")
+    }
   }
 
   override def onKeyReleased(keyCode: Int, char: Char): Unit = {
