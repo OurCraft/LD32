@@ -10,7 +10,12 @@ class BaguetteLevel extends Level {
 
   override def render(delta: Float): Unit = {
     super.render(delta)
-    // TODO: Render walls
+
+    val n: Int = walls.size
+    for(i <- 0 until n) {
+      val w: Wall = walls.get(i)
+      w.render(delta)
+    }
   }
 
   def canGoTo(aabb: AABB, x: Float, y: Float): Boolean = {

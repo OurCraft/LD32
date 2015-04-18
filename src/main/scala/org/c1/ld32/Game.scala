@@ -1,14 +1,17 @@
 package org.c1.ld32
 
+import org.c1.ld32.entity.EntityPlayer
 import org.c1.ld32.gui.{GuiMainMenu, GuiScreen}
+import org.c1.ld32.level.{Wall, BaguetteLevel}
 import org.lengine.GameBase
 import org.lengine.level.Level
+import org.lengine.maths.Vec2f
 import org.lengine.render.{FontRenderer, TextureAtlas}
-import org.lengine.tests.EntityPlayer
+import org.lwjgl.input.Keyboard
 
 object Game extends GameBase("LD32") {
 
-  var level: Level = _
+  var level: BaguetteLevel = _
 
   var fontRenderer: FontRenderer = _
 
@@ -20,14 +23,34 @@ object Game extends GameBase("LD32") {
 
   override def update(delta: Float): Unit = {
     level.update(delta)
+    if(isKeyPressed(Keyboard.KEY_LEFT)) {
+      player.walkLeft(delta)
+    }
+    if(isKeyPressed(Keyboard.KEY_RIGHT)) {
+      player.walkRight(delta)
+    }
+    if(isKeyPressed(Keyboard.KEY_UP)) {
+      player.walkUp(delta)
+    }
+    if(isKeyPressed(Keyboard.KEY_DOWN)) {
+      player.walkDown(delta)
+    }
   }
 
   override def initGame: Unit = {
     fontRenderer = new FontRenderer(new TextureAtlas("assets/textures/font.png", 16, 16))
 
-    level = new Level
+    level = new BaguetteLevel
     player = new EntityPlayer
     level spawn player
+
+    player.setPos(new Vec2f(300,100))
+
+    level.walls.add(new Wall(new Vec2f(100,20), new Vec2f(116, 500)))
+    level.walls.add(new Wall(new Vec2f(100+300,20), new Vec2f(116+300, 500)))
+
+    level.walls.add(new Wall(new Vec2f(100,20), new Vec2f(116+300, 36)))
+    level.walls.add(new Wall(new Vec2f(100,484), new Vec2f(116+300, 500)))
 
     if (currentGui != null) currentGui.init()
 
@@ -48,7 +71,10 @@ object Game extends GameBase("LD32") {
 
   override def render(delta: Float): Unit = {
     level.render(delta)
-    fontRenderer.renderString("LD32: An Unconventional Weapon", 0, getBaseHeight-17, 0xFFFFFFF, 1)
+    fontRenderer.renderString("LD32: An Unconventional Weapon", 0, getBaseHeight-17-16, 0xFFFFFFF, 1)
+    val x: Float = player.getPos.x
+    val y: Float = player.getPos.y
+    fontRenderer.renderString(s"pos: $x, $y", 0, getBaseHeight-17, 0xFFFFFFF, 1)
     if (currentGui != null) currentGui.render(delta)
   }
 
