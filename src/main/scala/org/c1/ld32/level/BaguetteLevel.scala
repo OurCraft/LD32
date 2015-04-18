@@ -1,12 +1,37 @@
 package org.c1.ld32.level
 
 import java.util.{ArrayList, List}
+import org.c1.ld32.entity.BaguetteEntity
 import org.c1.ld32.maths.AABB
+import org.lengine.entity.Entity
 import org.lengine.level.Level
 
 class BaguetteLevel extends Level {
 
   val walls: List[Wall] = new ArrayList[Wall]
+
+  override def update(delta: Float): Unit = {
+    super.update(delta)
+    for(i <- 0 until entities.size) {
+      val entity: Entity = entities.get(i)
+      if (entity.isInstanceOf[BaguetteEntity]) {
+        val current: BaguetteEntity = entity.asInstanceOf[BaguetteEntity]
+        current.boundingBox.x = current.getPos.x
+        current.boundingBox.y = current.getPos.y
+        for (j <- 0 until entities.size) {
+          val other: Entity = entities.get(j)
+          if (other != current && other.isInstanceOf[BaguetteEntity]) {
+            val otherEntity: BaguetteEntity = other.asInstanceOf[BaguetteEntity]
+            otherEntity.boundingBox.x = otherEntity.getPos.x
+            otherEntity.boundingBox.y = otherEntity.getPos.y
+            if(otherEntity.boundingBox.collides(current.boundingBox)) { // TODO: Optimize
+              current.onCollide(otherEntity)
+            }
+          }
+        }
+      }
+    }
+  }
 
   override def render(delta: Float): Unit = {
     super.render(delta)

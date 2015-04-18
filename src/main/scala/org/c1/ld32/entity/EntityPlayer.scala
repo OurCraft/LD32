@@ -1,12 +1,12 @@
 package org.c1.ld32.entity
 
 import org.c1.ld32.level.BaguetteLevel
-import org.lengine.level.Level
 import org.lengine.render.{Sprite, Texture}
 
 class EntityPlayer extends BaguetteEntity {
 
   val sprite: Sprite = new Sprite(new Texture("assets/textures/entities/player.png"))
+  var baguetteCompletion: Float = 0f
 
   override def render(delta: Float): Unit = {
     sprite.setPos(getPos.x, getPos.y)
@@ -15,7 +15,7 @@ class EntityPlayer extends BaguetteEntity {
   }
 
   override def init: Unit = {
-
+    super.init
   }
 
   override def update(delta: Float): Unit = {

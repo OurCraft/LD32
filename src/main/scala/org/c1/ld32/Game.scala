@@ -1,7 +1,7 @@
 package org.c1.ld32
 
-import org.c1.ld32.entity.EntityPlayer
-import org.c1.ld32.gui.{GuiMainMenu, GuiScreen}
+import org.c1.ld32.entity.{EntityBaguettePiece, EntityPlayer}
+import org.c1.ld32.gui.{GuiIngame, GuiMainMenu, GuiScreen}
 import org.c1.ld32.level.{BaguetteLevel, Wall}
 import org.lengine.GameBase
 import org.lengine.maths.Vec2f
@@ -45,7 +45,11 @@ object Game extends GameBase("LD32") {
     player = new EntityPlayer
     level spawn player
 
+    val baguetteTest: EntityBaguettePiece = new EntityBaguettePiece(0.5f)
+    baguetteTest.setPos(new Vec2f(300,200))
     player.setPos(new Vec2f(300,100))
+
+    level spawn baguetteTest
 
     level.walls.add(new Wall(new Vec2f(100,20), new Vec2f(116, 500)))
     level.walls.add(new Wall(new Vec2f(100+300,20), new Vec2f(116+300, 500)))
@@ -55,7 +59,7 @@ object Game extends GameBase("LD32") {
 
     if (currentGui != null) currentGui.init()
 
-    openGui(new GuiMainMenu)
+    openGui(new GuiIngame)
   }
 
   override def onKeyReleased(keyCode: Int, char: Char): Unit = {

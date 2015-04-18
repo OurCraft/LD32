@@ -10,4 +10,8 @@ abstract class BaguetteGui {
   def onMousePressed(x: Int, y: Int, button: Int): Unit = {
 
   }
+
+  implicit def toTexture(texture: String): Texture = {
+    new Texture(texture)
+  }
 }
