@@ -1,29 +1,45 @@
 package org.c1.ld32
 
+import org.c1.ld32.entity
+import org.c1.ld32.level.BaguetteLevel
 import org.lengine.GameBase
 import org.lengine.level.Level
 import org.lengine.render.{FontRenderer, TextureAtlas}
 import org.lengine.tests.EntityPlayer
+import org.lwjgl.input.{Keyboard, Controllers}
 
 object Game extends GameBase("LD32") {
 
-  var level: Level = _
+  var level: BaguetteLevel = _
 
   var fontRenderer: FontRenderer = _
 
-  var player: EntityPlayer = _
+  var player: entity.EntityPlayer = _
 
   override def getBaseHeight: Int = 640
 
   override def update(delta: Float): Unit = {
     level.update(delta)
+
+    if(isKeyPressed(Keyboard.KEY_LEFT)) {
+      player.walkLeft(delta)
+    }
+    if(isKeyPressed(Keyboard.KEY_RIGHT)) {
+      player.walkRight(delta)
+    }
+    if(isKeyPressed(Keyboard.KEY_UP)) {
+      player.walkUp(delta)
+    }
+    if(isKeyPressed(Keyboard.KEY_DOWN)) {
+      player.walkDown(delta)
+    }
   }
 
   override def initGame: Unit = {
     fontRenderer = new FontRenderer(new TextureAtlas("assets/textures/font.png", 16, 16))
 
-    level = new Level
-    player = new EntityPlayer
+    level = new BaguetteLevel
+    player = new entity.EntityPlayer
     level spawn player
   }
 

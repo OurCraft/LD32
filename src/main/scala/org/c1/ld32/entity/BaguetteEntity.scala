@@ -1,5 +1,6 @@
-package org.c1.ld32
+package org.c1.ld32.entity
 
+import org.c1.ld32.maths.AABB
 import org.lengine.entity.Entity
 
 abstract class BaguetteEntity extends Entity {

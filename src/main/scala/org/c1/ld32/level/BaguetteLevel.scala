@@ -1,7 +1,8 @@
-package org.c1.ld32
+package org.c1.ld32.level
 
+import java.util.{ArrayList, List}
+import org.c1.ld32.maths.AABB
 import org.lengine.level.Level
-import java.util.{List, ArrayList}
 
 class BaguetteLevel extends Level {
 
