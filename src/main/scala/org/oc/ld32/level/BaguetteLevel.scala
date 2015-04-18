@@ -20,32 +20,26 @@ class BaguetteLevel extends Level {
     spawn(baguettePiece)
   }
 
-
   val walls: List[Wall] = new ArrayList[Wall]
   val floorDecorations: List[FloorDecoration] = new ArrayList
 
-  override def update(delta: Float): Unit = {
-    super.update(delta)
-    for(i <- 0 until entities.size) {
-      val entity: Entity = entities.get(i)
-      entity match {
-        case current: BaguetteEntity =>
-          current.boundingBox.x = current.getPos.x
-          current.boundingBox.y = current.getPos.y
-          for (j <- 0 until entities.size) {
-            val other: Entity = entities.get(j)
-            if (other != current && other.isInstanceOf[BaguetteEntity]) {
-              val otherEntity: BaguetteEntity = other.asInstanceOf[BaguetteEntity]
-              otherEntity.boundingBox.x = otherEntity.getPos.x
-              otherEntity.boundingBox.y = otherEntity.getPos.y
-              if (otherEntity.boundingBox.collides(current.boundingBox)) {
-                // TODO: Optimize
-                current.onCollide(otherEntity)
-              }
+  override def onEntityUpdate(entity: Entity, delta: Float) = {
+    entity match {
+      case current: BaguetteEntity =>
+        current.boundingBox.x = current.getPos.x
+        current.boundingBox.y = current.getPos.y
+        for (j <- 0 until entities.size) {
+          val other: Entity = entities.get(j)
+          if (other != current && other.isInstanceOf[BaguetteEntity]) {
+            val otherEntity: BaguetteEntity = other.asInstanceOf[BaguetteEntity]
+            otherEntity.boundingBox.x = otherEntity.getPos.x
+            otherEntity.boundingBox.y = otherEntity.getPos.y
+            if (otherEntity.boundingBox.collides(current.boundingBox)) {
+              current.onCollide(otherEntity)
             }
           }
-        case _ =>
-      }
+        }
+      case _ =>
     }
   }
 

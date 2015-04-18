@@ -22,18 +22,12 @@ class EntityPlayer extends BaguetteEntity {
 
   }
 
-  def walkLeft(delta: Float): Boolean = {
-    val speed: Float = delta * 60f * 2f
-    val lvl: BaguetteLevel = level.asInstanceOf[BaguetteLevel]
-    if(lvl.canGoTo(boundingBox, getPos.x-speed, getPos.y)) {
-      getPos.x -= speed
-      return true
-    }
-    false
+  def walkLeft(delta: Float, speedMultiplier: Float = 1): Boolean = {
+    walkRight(delta, -speedMultiplier)
   }
 
-  def walkRight(delta: Float): Boolean = {
-    val speed: Float = delta * 60f * 2f
+  def walkRight(delta: Float, speedMultiplier: Float = 1): Boolean = {
+    val speed: Float = delta * 60f * 2f * speedMultiplier
     val lvl: BaguetteLevel = level.asInstanceOf[BaguetteLevel]
     if(lvl.canGoTo(boundingBox, getPos.x+speed, getPos.y)) {
       getPos.x += speed
@@ -42,8 +36,8 @@ class EntityPlayer extends BaguetteEntity {
     false
   }
 
-  def walkUp(delta: Float): Boolean = {
-    val speed: Float = delta * 60f * 2f
+  def walkUp(delta: Float, speedMultiplier: Float = 1): Boolean = {
+    val speed: Float = delta * 60f * 2f * speedMultiplier
     val lvl: BaguetteLevel = level.asInstanceOf[BaguetteLevel]
     if(lvl.canGoTo(boundingBox, getPos.x, getPos.y+speed)) {
       getPos.y += speed
@@ -52,13 +46,7 @@ class EntityPlayer extends BaguetteEntity {
     false
   }
 
-  def walkDown(delta: Float): Boolean = {
-    val speed: Float = delta * 60f * 2f
-    val lvl: BaguetteLevel = level.asInstanceOf[BaguetteLevel]
-    if(lvl.canGoTo(boundingBox, getPos.x, getPos.y-speed)) {
-      getPos.y -= speed
-      return true
-    }
-    false
+  def walkDown(delta: Float, speedMultiplier: Float = 1): Boolean = {
+    walkUp(delta, -speedMultiplier)
   }
 }

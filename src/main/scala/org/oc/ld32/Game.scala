@@ -1,11 +1,12 @@
 package org.oc.ld32
 
 import org.oc.ld32.gui.GuiIngame
+import org.oc.ld32.input.{Controls, LogitechMapping}
 import org.oc.ld32.level.BaguetteLevel
 import org.lengine.GameBase
 import org.lengine.maths.Vec2f
 import org.lengine.render.{FontRenderer, TextureAtlas}
-import org.lwjgl.input.Keyboard
+import org.lwjgl.input.{Controller, Keyboard}
 import org.oc.ld32.entity.EntityPlayer
 import org.oc.ld32.gui.{GuiIngame, GuiScreen}
 import org.oc.ld32.level.{BaguetteLevel, LevelLoader}
@@ -15,28 +16,32 @@ import scala.collection.JavaConversions._
 object Game extends GameBase("Baguettes") {
 
   var level: BaguetteLevel = _
-
   var fontRenderer: FontRenderer = _
-
   var player: EntityPlayer = _
-
   var currentGui: GuiScreen = _
+  var usingGamepad = false
 
   override def getBaseHeight: Int = 640
 
   override def update(delta: Float): Unit = {
     level.update(delta)
-    if(isKeyPressed(Keyboard.KEY_LEFT)) {
-      player.walkLeft(delta)
-    }
-    if(isKeyPressed(Keyboard.KEY_RIGHT)) {
-      player.walkRight(delta)
-    }
-    if(isKeyPressed(Keyboard.KEY_UP)) {
-      player.walkUp(delta)
-    }
-    if(isKeyPressed(Keyboard.KEY_DOWN)) {
-      player.walkDown(delta)
+
+    if(!usingGamepad) {
+      if (isKeyPressed(Keyboard.KEY_LEFT)) {
+        player.walkLeft(delta)
+      }
+      if (isKeyPressed(Keyboard.KEY_RIGHT)) {
+        player.walkRight(delta)
+      }
+      if (isKeyPressed(Keyboard.KEY_UP)) {
+        player.walkUp(delta)
+      }
+      if (isKeyPressed(Keyboard.KEY_DOWN)) {
+        player.walkDown(delta)
+      }
+    } else {
+      player.walkRight(delta, getAxisValue(Controls.MOVE_X))
+      player.walkUp(delta, -getAxisValue(Controls.MOVE_Y))
     }
   }
 
@@ -58,16 +63,16 @@ object Game extends GameBase("Baguettes") {
     player setPos level.spawnpoint
 
     if(reloadMusic && level.music != null) {
-      soundManager.play("musics/"+level.music+".ogg")
+   //   soundManager.play("musics/"+level.music+".ogg")
     }
   }
 
   override def onKeyReleased(keyCode: Int, char: Char): Unit = {
-
+    usingGamepad = false
   }
 
   override def onMouseMoved(x: Int, y: Int, dx: Int, dy: Int): Unit = {
-
+    usingGamepad = false
   }
 
   override def onKeyPressed(keyCode: Int, char: Char): Unit = {
@@ -76,6 +81,7 @@ object Game extends GameBase("Baguettes") {
         element.onKeyPressed(keyCode, char)
       }
     }
+    usingGamepad = false
   }
 
   override def render(delta: Float): Unit = {
@@ -110,5 +116,30 @@ object Game extends GameBase("Baguettes") {
   def displayGuiScreen(gui: GuiScreen): Unit = {
     currentGui = gui
     currentGui.init()
+  }
+
+  override def onAxisMoved(x: Float, y: Float, index: Int, source: Controller): Unit = {
+    // TODO: Use for mappings
+    usingGamepad = true
+  }
+
+  override def onButtonPressed(index: Int, source: Controller): Unit = {
+    println(s"button pressed $index")
+    usingGamepad = true
+  }
+
+  override def onButtonReleased(index: Int, source: Controller): Unit = {
+    println(s"button released $index")
+    usingGamepad = true
+  }
+
+  override def onPovYMoved(value: Float, index: Int, source: Controller): Unit = {
+    println(s"pov y $value")
+    usingGamepad = true
+  }
+
+  override def onPovXMoved(value: Float, index: Int, source: Controller): Unit = {
+    println(s"pov x $value")
+    usingGamepad = true
   }
 }
