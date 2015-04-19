@@ -27,32 +27,32 @@ object Game extends GameBase("Baguettes") {
       level.update(delta)
 
       if (!usingGamepad) {
-        if (isKeyPressed(KeyControls.getKeyCode("left"))) {
+        if (isKeyPressed(KeyControls.left)) {
           player.walkLeft(delta)
         }
-        if (isKeyPressed(KeyControls.getKeyCode("right"))) {
+        if (isKeyPressed(KeyControls.right)) {
           player.walkRight(delta)
         }
-        if (isKeyPressed(KeyControls.getKeyCode("forward"))) {
+        if (isKeyPressed(KeyControls.up)) {
           player.walkUp(delta)
         }
-        if (isKeyPressed(KeyControls.getKeyCode("back"))) {
+        if (isKeyPressed(KeyControls.down)) {
           player.walkDown(delta)
         }
         val mousePos = player.getPos - new Vec2f(Mouse.getX, Mouse.getY)
         player.setAngle(Math.atan2(mousePos.y, mousePos.x).toFloat)
       } else {
         val threshold = 0.10
-        val xMove = getAxisValue(Controls.MOVE_X)
+        val xMove = getAxisValue(Controls.moveX)
         if(Math.abs(xMove) >= threshold)
           player.walkRight(delta, xMove*2f)
 
-        val yMove = -getAxisValue(Controls.MOVE_Y)
+        val yMove = -getAxisValue(Controls.moveY)
         if(Math.abs(yMove) >= threshold)
           player.walkUp(delta, yMove*2f)
 
-        val lookX = getAxisValue(Controls.LOOK_X)
-        val lookY = getAxisValue(Controls.LOOK_Y)
+        val lookX = getAxisValue(Controls.lookX)
+        val lookY = getAxisValue(Controls.lookY)
         val angle = Math.atan2(lookY, -lookX)
         if(Math.abs(lookX) >= threshold || Math.abs(lookY) >= threshold)
           player.setAngle(angle.toFloat)
@@ -119,9 +119,7 @@ object Game extends GameBase("Baguettes") {
 
   override def onMousePressed(x: Int, y: Int, button: Int): Unit = {
     if (currentGui != null) {
-      for (element <- currentGui.elements) {
-        element.onMousePressed(x, y, button)
-      }
+      currentGui.onMousePressed(x,y,button)
     }
   }
 
@@ -147,16 +145,25 @@ object Game extends GameBase("Baguettes") {
   override def onAxisMoved(value: Float, index: Int, source: Controller): Unit = {
     // TODO: Use for mappings
   //  println(s"$value $index")
+    if (currentGui != null) {
+      currentGui.onAxisMoved(value, index)
+    }
     usingGamepad = true
   }
 
   override def onButtonPressed(index: Int, source: Controller): Unit = {
     println(s"button pressed $index")
+    if (currentGui != null) {
+      currentGui.onButtonPressed(index)
+    }
     usingGamepad = true
   }
 
   override def onButtonReleased(index: Int, source: Controller): Unit = {
     println(s"button released $index")
+    if (currentGui != null) {
+      currentGui.onButtonReleased(index)
+    }
     usingGamepad = true
   }
 

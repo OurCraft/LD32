@@ -31,6 +31,18 @@ abstract class BaguetteGui {
 
   }
 
+  def onAxisMoved(value: Float, index: Int) = {
+
+  }
+
+  def onButtonPressed(button: Int) = {
+
+  }
+
+  def onButtonReleased(button: Int) = {
+
+  }
+
   implicit def toTexture(texture: String): Texture = {
     new Texture(texture)
   }

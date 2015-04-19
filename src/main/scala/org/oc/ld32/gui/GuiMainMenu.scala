@@ -126,7 +126,7 @@ class GuiMainMenu extends GuiScreen with ActionHandler {
         // Todo: options
         Game.displayGuiScreen(new GuiOptions)
       } else if (id == 4) {
-        System.exit(1)
+        System.exit(0)
       }
     }
   }

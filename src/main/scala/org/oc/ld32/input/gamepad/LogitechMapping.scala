@@ -1,6 +1,9 @@
 package org.oc.ld32.input.gamepad
 
-object LogitechMapping {
+object LogitechMapping extends GamepadMapping {
+
+  val BUTTON1 = 0
+
   val LEFT_X_AXIS = 3
   val LEFT_Y_AXIS = 2
 

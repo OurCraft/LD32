@@ -12,6 +12,12 @@ import scala.collection.JavaConversions._
 
 object KeyControls {
 
+  var confirm: Int = Keyboard.KEY_RETURN
+  var left: Int = Keyboard.KEY_LEFT
+  var up: Int = Keyboard.KEY_UP
+  var down: Int = Keyboard.KEY_DOWN
+  var right: Int = Keyboard.KEY_RIGHT
+
   private val gson: Gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().enableComplexMapKeySerialization().create()
 
   private val conf: File = new File(Game.getGameDir, "config.json")
@@ -23,10 +29,11 @@ object KeyControls {
 
 
   def init() = {
-    defaultBinding.put("forward", String.valueOf(Keyboard.KEY_UP))
-    defaultBinding.put("back", String.valueOf(Keyboard.KEY_DOWN))
-    defaultBinding.put("left", String.valueOf(Keyboard.KEY_LEFT))
-    defaultBinding.put("right", String.valueOf(Keyboard.KEY_RIGHT))
+    defaultBinding.put("up", String.valueOf(up))
+    defaultBinding.put("down", String.valueOf(down))
+    defaultBinding.put("left", String.valueOf(left))
+    defaultBinding.put("right", String.valueOf(right))
+    defaultBinding.put("confirm", String.valueOf(confirm))
 
     if(!conf.exists())
     {
@@ -52,10 +59,16 @@ object KeyControls {
     val reader: FileReader = new FileReader(conf)
     val configObject: util.Map[String, Object] = gson.fromJson(reader, classOf[util.Map[String, Object]])
 
-    if(configObject.get("keys") != null)
-    {
+    if(configObject.get("keys") != null) {
       keys = configObject.get("keys").asInstanceOf[util.Map[String, String]]
     }
+
+    confirm = getKeyCode("confirm")
+    left = getKeyCode("left")
+    right = getKeyCode("right")
+    down = getKeyCode("down")
+    up = getKeyCode("up")
+
 
     reader.close()
   }
