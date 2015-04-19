@@ -78,6 +78,18 @@ object Game extends GameBase("Baguettes") {
     player setPos level.spawnpoint
 
     if(reloadMusic && level.music != null) {
+      //  soundManager.play("musics/"+level.music+".ogg")
+    }
+  }
+
+  def loadRawLevel(json: String, reloadMusic: Boolean = false): Unit = {
+    level = LevelLoader.loadRaw(json)
+    player = new EntityPlayer
+    level spawn player
+
+    player setPos level.spawnpoint
+
+    if(reloadMusic && level.music != null) {
     //  soundManager.play("musics/"+level.music+".ogg")
     }
   }

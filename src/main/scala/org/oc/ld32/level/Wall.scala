@@ -13,7 +13,7 @@ class Wall(var id: String, val start: Vec2f, val end: Vec2f) {
   val h = Math.abs((Math.max(start.y, end.y)/16f).toInt * 16f - y)
   val boundingBox: AABB = new AABB(x,y,w,h)
 
-  private val vertical: Boolean = w < h
+  val vertical: Boolean = w < h
 
   val texture: Texture = new Texture(s"assets/textures/levels/walls.png")
   val sprite: Sprite = new Sprite(texture)

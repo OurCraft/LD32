@@ -5,6 +5,9 @@ import org.lengine.render.{Sprite, Texture}
 class EntityBaguettePiece(val value: Float) extends BaguetteEntity {
 
   private val sprite: Sprite = new Sprite(new Texture("assets/textures/entities/baguette.png"))
+  sprite.width *= 2f
+  sprite.height *= 2f
+  sprite.getCenter *= 2f
 
   override def render(delta: Float): Unit = {
     sprite.setPos(getPos.x, getPos.y)
@@ -19,8 +22,8 @@ class EntityBaguettePiece(val value: Float) extends BaguetteEntity {
 
   override def init: Unit = {
     super.init
-    boundingBox.width = 32f
-    boundingBox.height = 32f
+    boundingBox.width = 64f
+    boundingBox.height = 64f
   }
 
   override def onCollide(other: BaguetteEntity): Unit = {

@@ -1,7 +1,9 @@
 package org.oc.ld32.gui.editor
 
+import java.io._
 import java.util
 
+import com.google.gson.stream.JsonWriter
 import org.lengine.maths.Vec2f
 import org.lengine.render.{Sprite, TextureRegion, TextureAtlas}
 import org.lwjgl.input.Keyboard
@@ -10,7 +12,7 @@ import org.oc.ld32.gui._
 import java.util.{List, ArrayList, Map, HashMap, Stack}
 
 import org.oc.ld32.input.gamepad.Controls
-import org.oc.ld32.level.{FloorDecoration, Wall}
+import org.oc.ld32.level.{LevelLoader, FloorDecoration, Wall}
 import org.oc.ld32.render.Animation
 
 import scala.collection.JavaConversions._
@@ -20,11 +22,13 @@ class GuiEditor extends GuiScreen {
   val WALL: String = "wall"
   val ENEMY: String = "enemy"
   val FLOOR: String = "floor"
+  val RUN: String = "run"
+  val SAVE: String = "save"
 
   var currentObject: String = WALL
   var extraData: String = null
 
-  val options: scala.List[String] = scala.List(ENEMY, FLOOR, WALL)
+  val options: scala.List[String] = scala.List(ENEMY, FLOOR, WALL, RUN, SAVE)
 
   val walls: List[Wall] = new ArrayList
   val floorDecorations: List[FloorDecoration] = new ArrayList
@@ -33,6 +37,8 @@ class GuiEditor extends GuiScreen {
   val nortapSprite = new Sprite("assets/textures/entities/nortap.png", new TextureRegion(0,0,1,1f/4f))
   val floorSprite = new Sprite("assets/textures/gui/editorFloor.png")
   val wallSprite = new Sprite("assets/textures/gui/editorWalls.png")
+  val testSprite = new Sprite("assets/textures/gui/editorTest.png")
+  val saveSprite = new Sprite("assets/textures/gui/editorSave.png")
   val cursorSprite = new Sprite("assets/textures/gui/editorCursor.png")
   var showCursor = false
   var dragging = false
@@ -159,8 +165,13 @@ class GuiEditor extends GuiScreen {
     floorSprite.setPos(64f,height-nortapSprite.height)
     wallSprite.setPos(128f,height-nortapSprite.height)
 
+    testSprite.setPos(128f+64f,height-nortapSprite.height)
+    saveSprite.setPos(256f,height-nortapSprite.height)
+
     wallSprite.render(delta)
     floorSprite.render(delta)
+    saveSprite.render(delta)
+    testSprite.render(delta)
     nortapSprite.render(delta)
 
     if(!dragging && modalWindow == null) {
@@ -306,14 +317,14 @@ class GuiEditor extends GuiScreen {
       window.add(button)
     }
 
-    val confirmButton = new GuiButton("Confirm",x + w/2f-200f-10f, y +20f)
+    val confirmButton = new GuiButton("Confirm", x + w/2f-200f-10f, y +20f)
     confirmButton.setHandler(button => {
       currentObject = ENEMY
       extraData = s"$id;$ai"
       removeModalWindow
     })
 
-    val cancelButton = new GuiButton("Cancel",x + w/2f + 10f, y + 20f)
+    val cancelButton = new GuiButton("Cancel", x + w/2f + 10f, y + 20f)
     cancelButton.setHandler(button => {
       removeModalWindow
     })
@@ -322,6 +333,143 @@ class GuiEditor extends GuiScreen {
     window.add(cancelButton)
     window.add(titleLabel)
 
+    modalWindow = window
+    elements.add(modalWindow)
+  }
+
+  def writeLevel(out: Writer): Unit = {
+    val writer = new JsonWriter(new BufferedWriter(out))
+    writer.beginObject()
+
+    writer.name("spawnpoint")
+    writer.beginArray()
+    writer.value(0)
+    writer.value(0) // Todo: true spawnpoint
+    writer.endArray()
+
+    writer.name("music")
+    writer.value("Night Shift - Möbius") // todo: true music
+
+    writer.name("enemies")
+    writer.beginArray()
+    for(enemy <- enemyDefinitions) {
+      writer.beginObject()
+
+      writer.name("id")
+      writer.value(enemy.id)
+
+      writer.name("ai")
+      writer.value(enemy.aiType)
+
+      writer.name("x")
+      writer.value(enemy.x)
+
+      writer.name("y")
+      writer.value(enemy.y)
+
+      writer.endObject()
+    }
+    writer.endArray()
+
+    writer.name("floor")
+    writer.beginArray()
+    for(floor <- floorDecorations) {
+      writer.beginObject()
+
+      writer.name("texture")
+      writer.value(floor.id)
+
+      writer.name("x")
+      writer.value(floor.x)
+
+      writer.name("y")
+      writer.value(floor.y)
+
+      writer.name("width")
+      writer.value(floor.width)
+
+      writer.name("height")
+      writer.value(floor.height)
+
+      writer.endObject()
+    }
+    writer.endArray()
+
+    writer.name("walls")
+    writer.beginArray()
+    for(wall <- walls) {
+      writer.beginObject()
+
+      writer.name("id")
+      writer.value(wall.id)
+
+      writer.name("x")
+      writer.value(wall.x)
+
+      writer.name("y")
+      writer.value(wall.y)
+
+      writer.name("vertical")
+      writer.value(wall.vertical)
+
+      writer.name("length")
+      if(wall.vertical) {
+        writer.value(wall.h)
+      } else {
+        writer.value(wall.w)
+      }
+
+      writer.endObject()
+    }
+    writer.endArray()
+
+    writer.endObject()
+    writer.flush()
+    writer.close()
+  }
+
+
+  def saveLevel(id: String): Unit = {
+    val destination = new File(Game.getGameDir(),s"customLevels/$id.json")
+    if(!destination.getParentFile.exists()) {
+      destination.getParentFile.mkdirs()
+    }
+    val fileWriter = new FileWriter(destination)
+    writeLevel(fileWriter)
+  }
+
+  def showSaveWindow(): Unit = {
+    val w = width/2f
+    val h = height/2f
+    val x = width/2f-w/2f
+    val y = height/2f-h/2f
+    val window = new ModalWindow(x,y,w,h)
+    val title = "Save level"
+    val titleLabel = new GuiLabel(title, x + w/2f - Game.fontRenderer.getWidth(title)/2f, y+h-32f)
+
+
+    val input = new GuiTextField(x + w/2f-200f, y+h/2f-16f)
+    val inputLabel = new GuiLabel("Enter the level file name here:", input.x, input.y + input.h + 5f)
+    window.add(inputLabel)
+
+    val confirmButton = new GuiButton("Confirm", x + w/2f-200f-10f, y +20f)
+    confirmButton.setHandler(button => {
+      if(!input.text.isEmpty) {
+        saveLevel(input.text)
+        extraData = null
+        removeModalWindow
+      }
+    })
+
+    val cancelButton = new GuiButton("Cancel", x + w/2f + 10f, y + 20f)
+    cancelButton.setHandler(button => {
+      extraData = null
+      removeModalWindow
+    })
+    window.add(input)
+    window.add(titleLabel)
+    window.add(cancelButton)
+    window.add(confirmButton)
     modalWindow = window
     elements.add(modalWindow)
   }
@@ -368,6 +516,19 @@ class GuiEditor extends GuiScreen {
           case ENEMY => {
             extraData = "nortap;patrol"
             showEnemyWindow()
+          }
+
+          case RUN => {
+            currentObject = WALL
+            val writer = new StringWriter
+            writeLevel(writer)
+            Game.loadRawLevel(writer.getBuffer.toString)
+            Game.displayGuiScreen(new GuiIngame)
+          }
+
+          case SAVE => {
+            currentObject = WALL
+            showSaveWindow()
           }
 
           case _ => {
