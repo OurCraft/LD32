@@ -5,6 +5,7 @@ import org.lengine.maths.Quaternion
 import org.lengine.render.{RenderEngine, Sprite}
 import org.oc.ld32.Game
 import org.oc.ld32.gui.action.ActionHandler
+import org.oc.ld32.gui.editor.GuiEditor
 
 class GuiMainMenu extends GuiScreen with ActionHandler {
 
@@ -122,6 +123,7 @@ class GuiMainMenu extends GuiScreen with ActionHandler {
         // Todo: level selection
       } else if (id == 2) {
         // Todo: editor
+        Game.displayGuiScreen(new GuiEditor)
       } else if (id == 3) {
         // Todo: options
         Game.displayGuiScreen(new GuiOptions)

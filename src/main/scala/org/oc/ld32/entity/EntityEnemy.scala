@@ -25,7 +25,7 @@ class EntityEnemy(id: String) extends EntityBiped(id) {
     }
   }
   override def update(delta: Float): Unit = {
-    updateAITasks(delta)
     super.update(delta)
+    updateAITasks(delta)
   }
 }
