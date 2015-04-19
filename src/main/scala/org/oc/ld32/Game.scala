@@ -23,8 +23,6 @@ object Game extends GameBase("Baguettes") {
   override def getBaseHeight: Int = 640
 
   override def update(delta: Float): Unit = {
-
-    println("hllo")
     if (level != null) {
       level.update(delta)
 

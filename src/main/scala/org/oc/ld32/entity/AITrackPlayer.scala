@@ -1,5 +1,6 @@
 package org.oc.ld32.entity
 
+import java.io.File
 import java.util
 import java.util.{PriorityQueue, HashMap, List, ArrayList}
 
@@ -30,7 +31,6 @@ class AITrackPlayer(priority: Int, enemy: EntityEnemy, speed: Float = 32f) exten
     val box = new AABB(node.pos.x, node.pos.y, enemy.boundingBox.width, enemy.boundingBox.height)
     for(i <- 0 until 9) {
       if(i != 4) { // the middle node is the current one
-        println("dijqzokzjd")
         var x: Float = i % 3 - 1
         var y: Float = i / 3 - 1
         x *= enemy.boundingBox.width/16f
@@ -80,28 +80,7 @@ class AITrackPlayer(priority: Int, enemy: EntityEnemy, speed: Float = 32f) exten
 
     val start = enemy.getPos
     val end = Game.player.getPos
-    /*
-    frontier = PriorityQueue()
-    frontier.put(start, 0)
-    came_from = {}
-    cost_so_far = {}
-    came_from[start] = None
-    cost_so_far[start] = 0
 
-    while not frontier.empty():
-       current = frontier.get()
-
-       if current == goal:
-          break
-
-       for next in graph.neighbors(current):
-          new_cost = cost_so_far[current] + graph.cost(current, next)
-          if next not in cost_so_far or new_cost < cost_so_far[next]:
-             cost_so_far[next] = new_cost
-             priority = new_cost + heuristic(goal, next)
-             frontier.put(next, priority)
-             came_from[next] = current
-     */
     val frontier = new PriorityQueue[PathNode]
     val startNode = new PathNode(0, start)
     frontier.add(startNode)
