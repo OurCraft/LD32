@@ -3,6 +3,8 @@ package org.oc.ld32.entity
 import java.util.{List, ArrayList}
 
 class EntityEnemy(id: String) extends EntityBiped(id) {
+  var target: EntityPlayer = null
+
   val aiList: List[AITask] = new ArrayList[AITask]
 
   def updateAITasks(delta: Float): Unit = {

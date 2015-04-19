@@ -1,6 +1,6 @@
 package org.oc.ld32.entity
 
-class AIPatrol(priority: Int, entity: EntityBiped) extends AITask(priority, entity) {
+class AIPatrol(priority: Int, entity: EntityEnemy) extends AITask(priority, entity) {
 
   val LEFT = 0
   val RIGHT = 1
@@ -12,11 +12,11 @@ class AIPatrol(priority: Int, entity: EntityBiped) extends AITask(priority, enti
   var direction: Int = DOWN
 
   override def shouldContinue: Boolean = {
-    true
+    entity.target == null
   }
 
   override def canExecute: Boolean = {
-    true
+    entity.target == null
   }
 
   def nextDirection = {

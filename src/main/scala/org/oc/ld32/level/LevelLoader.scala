@@ -3,7 +3,7 @@ package org.oc.ld32.level
 import com.google.gson.{JsonArray, JsonObject, Gson}
 import org.lengine.maths.Vec2f
 import org.lengine.utils.IOUtils
-import org.oc.ld32.entity.{Tasks, EntityEnemy, EntityBaguettePiece}
+import org.oc.ld32.entity.{AISpot, Tasks, EntityEnemy, EntityBaguettePiece}
 
 object LevelLoader {
 
@@ -72,6 +72,8 @@ object LevelLoader {
       enemy.setPos(new Vec2f(x, y))
       val task = Tasks.createFromID(enemy, aiType)
       enemy.aiList.add(task)
+
+      enemy.aiList.add(new AISpot(1, enemy))
 
       level spawn enemy
     }

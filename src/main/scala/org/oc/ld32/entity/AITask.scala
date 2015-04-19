@@ -10,7 +10,7 @@ object Tasks {
     }
 }
 
-abstract class AITask(val priority: Int, val owner: BaguetteEntity) {
+abstract class AITask(val priority: Int, val owner: EntityEnemy) {
 
   var running = false
 
