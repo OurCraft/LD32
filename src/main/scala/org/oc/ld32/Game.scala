@@ -23,6 +23,8 @@ object Game extends GameBase("Baguettes") {
   override def getBaseHeight: Int = 640
 
   override def update(delta: Float): Unit = {
+
+    println("hllo")
     if (level != null) {
       level.update(delta)
 
@@ -45,11 +47,11 @@ object Game extends GameBase("Baguettes") {
         val threshold = 0.10
         val xMove = getAxisValue(Controls.MOVE_X)
         if(Math.abs(xMove) >= threshold)
-          player.walkRight(delta, xMove)
+          player.walkRight(delta, xMove*2f)
 
         val yMove = -getAxisValue(Controls.MOVE_Y)
         if(Math.abs(yMove) >= threshold)
-          player.walkUp(delta, yMove)
+          player.walkUp(delta, yMove*2f)
 
         val lookX = getAxisValue(Controls.LOOK_X)
         val lookY = getAxisValue(Controls.LOOK_Y)

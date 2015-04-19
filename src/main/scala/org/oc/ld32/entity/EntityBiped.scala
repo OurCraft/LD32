@@ -22,7 +22,7 @@ abstract class EntityBiped(id: String) extends BaguetteEntity {
     anim.transform.angle = getAngle+(Math.PI/2f).toFloat
 
     legAnim.transform.pos.set(getPos)
-    legAnim.transform.angle = movingDir.angle+(Math.PI/2f).toFloat
+    legAnim.transform.angle = (Math.atan2(movingDir.y, movingDir.x)+Math.PI/2f).toFloat
 
     legAnim.render(delta)
     anim.render(delta)
@@ -36,11 +36,11 @@ abstract class EntityBiped(id: String) extends BaguetteEntity {
     super.update(delta)
   }
 
-  def walkLeft(delta: Float, speedMultiplier: Float = 1): Boolean = {
+  def walkLeft(delta: Float, speedMultiplier: Float = 2f): Boolean = {
     walkRight(delta, -speedMultiplier)
   }
 
-  def walkRight(delta: Float, speedMultiplier: Float = 1): Boolean = {
+  def walkRight(delta: Float, speedMultiplier: Float = 2f): Boolean = {
     val speed: Float = delta * 60f * 2f * speedMultiplier
     val lvl: BaguetteLevel = level.asInstanceOf[BaguetteLevel]
     if(lvl.canGoTo(boundingBox, getPos.x+speed, getPos.y)) {
@@ -50,7 +50,7 @@ abstract class EntityBiped(id: String) extends BaguetteEntity {
     false
   }
 
-  def walkUp(delta: Float, speedMultiplier: Float = 1): Boolean = {
+  def walkUp(delta: Float, speedMultiplier: Float = 2f): Boolean = {
     val speed: Float = delta * 60f * 2f * speedMultiplier
     val lvl: BaguetteLevel = level.asInstanceOf[BaguetteLevel]
     if(lvl.canGoTo(boundingBox, getPos.x, getPos.y+speed)) {
@@ -60,7 +60,7 @@ abstract class EntityBiped(id: String) extends BaguetteEntity {
     false
   }
 
-  def walkDown(delta: Float, speedMultiplier: Float = 1): Boolean = {
+  def walkDown(delta: Float, speedMultiplier: Float = 2f): Boolean = {
     walkUp(delta, -speedMultiplier)
   }
 }
