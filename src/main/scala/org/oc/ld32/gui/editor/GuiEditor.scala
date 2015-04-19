@@ -22,23 +22,26 @@ class GuiEditor extends GuiScreen {
   val WALL: String = "wall"
   val ENEMY: String = "enemy"
   val FLOOR: String = "floor"
+  val BAGUETTE: String = "baguette"
   val RUN: String = "run"
   val SAVE: String = "save"
 
   var currentObject: String = WALL
   var extraData: String = null
 
-  val options: scala.List[String] = scala.List(ENEMY, FLOOR, WALL, RUN, SAVE)
+  val options: scala.List[String] = scala.List(ENEMY, FLOOR, WALL, BAGUETTE, RUN, SAVE)
 
   val walls: List[Wall] = new ArrayList
   val floorDecorations: List[FloorDecoration] = new ArrayList
   val enemyDefinitions: List[EnemyDef] = new ArrayList
+  val baguettes: List[BaguetteDef] = new ArrayList
   val anims: Map[String, Animation] = new HashMap
   val nortapSprite = new Sprite("assets/textures/entities/nortap.png", new TextureRegion(0,0,1,1f/4f))
   val floorSprite = new Sprite("assets/textures/gui/editorFloor.png")
   val wallSprite = new Sprite("assets/textures/gui/editorWalls.png")
   val testSprite = new Sprite("assets/textures/gui/editorTest.png")
   val saveSprite = new Sprite("assets/textures/gui/editorSave.png")
+  val baguetteSprite = new Sprite("assets/textures/entities/baguette.png")
   val cursorSprite = new Sprite("assets/textures/gui/editorCursor.png")
   var showCursor = false
   var dragging = false
@@ -52,6 +55,9 @@ class GuiEditor extends GuiScreen {
   val shadowSprite = new Sprite("assets/textures/gui/shadow.png")
   shadowSprite.width = width
   shadowSprite.height = height
+
+  baguetteSprite.width *= 2f
+  baguetteSprite.height *= 2f
 
   override def init(): Unit = {
     cursor.set(width/2f, height/2f)
@@ -149,6 +155,11 @@ class GuiEditor extends GuiScreen {
       floor.render(delta)
     }
 
+    for(baguette <- baguettes) {
+      baguetteSprite.setPos(baguette.x, baguette.y)
+      baguetteSprite.render(delta)
+    }
+
     for(enemy <- enemyDefinitions) {
       val anim: Animation = getAnim(enemy.id)
       anim.update(delta)
@@ -164,15 +175,16 @@ class GuiEditor extends GuiScreen {
     nortapSprite.setPos(0,height-nortapSprite.height)
     floorSprite.setPos(64f,height-nortapSprite.height)
     wallSprite.setPos(128f,height-nortapSprite.height)
-
-    testSprite.setPos(128f+64f,height-nortapSprite.height)
-    saveSprite.setPos(256f,height-nortapSprite.height)
+    baguetteSprite.setPos(128+64f,height-nortapSprite.height)
+    testSprite.setPos(256f,height-nortapSprite.height)
+    saveSprite.setPos(256f+64f,height-nortapSprite.height)
 
     wallSprite.render(delta)
     floorSprite.render(delta)
     saveSprite.render(delta)
     testSprite.render(delta)
     nortapSprite.render(delta)
+    baguetteSprite.render(delta)
 
     if(!dragging && modalWindow == null) {
       var text = currentObject
@@ -220,6 +232,10 @@ class GuiEditor extends GuiScreen {
 
         case ENEMY => {
           enemyDefinitions.remove(enemyDefinitions.size - 1)
+        }
+
+        case BAGUETTE => {
+          baguettes.remove(baguettes.size - 1)
         }
 
         case _ =>
@@ -423,11 +439,28 @@ class GuiEditor extends GuiScreen {
     }
     writer.endArray()
 
+    writer.name("baguettes")
+    writer.beginArray()
+    for(baguette <- baguettes) {
+      writer.beginObject()
+
+      writer.name("value")
+      writer.value(baguette.value)
+
+      writer.name("x")
+      writer.value(baguette.x)
+
+      writer.name("y")
+      writer.value(baguette.y)
+
+      writer.endObject()
+    }
+    writer.endArray()
+
     writer.endObject()
     writer.flush()
     writer.close()
   }
-
 
   def saveLevel(id: String): Unit = {
     val destination = new File(Game.getGameDir(),s"customLevels/$id.json")
@@ -500,6 +533,10 @@ class GuiEditor extends GuiScreen {
           enemyDefinitions.add(enemy)
         }
 
+        case BAGUETTE => {
+          baguettes.add(new BaguetteDef(java.lang.Float.parseFloat(extraData), cursor.x, cursor.y))
+        }
+
         case _ =>
       }
     } else {
@@ -529,6 +566,10 @@ class GuiEditor extends GuiScreen {
           case SAVE => {
             currentObject = WALL
             showSaveWindow()
+          }
+
+          case BAGUETTE => {
+            extraData = "0.25"
           }
 
           case _ => {
