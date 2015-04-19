@@ -9,4 +9,8 @@ class AABB(var x: Float = 0, var y: Float = 0, var width: Float, var height: Flo
       || y+height < other.y
       )
   }
+
+  def translate(xAmount: Float, yAmount: Float): AABB = {
+    new AABB(x+xAmount, y+yAmount, width, height)
+  }
 }

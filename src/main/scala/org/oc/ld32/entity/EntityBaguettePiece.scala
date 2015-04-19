@@ -24,7 +24,6 @@ class EntityBaguettePiece(val value: Float) extends BaguetteEntity {
   }
 
   override def onCollide(other: BaguetteEntity): Unit = {
-    println(other)
     other match {
       case player: EntityPlayer =>
         player.baguetteCompletion += value

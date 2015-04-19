@@ -4,12 +4,17 @@ import java.util
 import java.util.{PriorityQueue, HashMap, List, ArrayList}
 
 import org.lengine.maths.Vec2f
+import org.lengine.render.RenderEngine
 import org.oc.ld32.Game
 import org.oc.ld32.entity.ai.PathNode
+import org.oc.ld32.level.BaguetteLevel
+import org.oc.ld32.maths.AABB
 
-class AITrackPlayer(priority: Int, enemy: EntityEnemy) extends AITask(priority, enemy) {
+class AITrackPlayer(priority: Int, enemy: EntityEnemy, speed: Float = 32f) extends AITask(priority, enemy) {
 
   var path: List[PathNode] = new ArrayList
+  var currentIndex: Float = 0
+  var lastUpdated = 0f
 
   override def shouldContinue: Boolean = {
     enemy.target != null
@@ -21,11 +26,26 @@ class AITrackPlayer(priority: Int, enemy: EntityEnemy) extends AITask(priority, 
 
   def computeNeighbors(node: PathNode): List[PathNode] = {
     val list = new util.ArrayList[PathNode]
+    val lvl = enemy.level.asInstanceOf[BaguetteLevel]
+    val box = new AABB(node.pos.x, node.pos.y, enemy.boundingBox.width, enemy.boundingBox.height)
+    for(i <- 0 until 9) {
+      if(i != 4) { // the middle node is the current one
+        println("dijqzokzjd")
+        var x: Float = i % 3 - 1
+        var y: Float = i / 3 - 1
+        x *= enemy.boundingBox.width/16f
+        y *= enemy.boundingBox.height/16f
+        val newBox = box.translate(x, y)
+        if(lvl.canGoTo(newBox, newBox.x, newBox.y)) {
+          list.add(new PathNode(0, new Vec2f(newBox.x, newBox.y)))
+        }
+      }
+    }
     list
   }
 
   def computeCost(a: PathNode, b: PathNode): Float = {
-    0
+    ~(a.pos - b.pos)
   }
 
   def heuristic(goal: Vec2f, node: PathNode) = {
@@ -33,10 +53,31 @@ class AITrackPlayer(priority: Int, enemy: EntityEnemy) extends AITask(priority, 
   }
 
   override def perform(delta: Float): Unit = {
+    if(RenderEngine.time - lastUpdated >= 0.5f) {
+      lastUpdated = RenderEngine.time
+      reset
+    }
 
+    if(!path.isEmpty) {
+      if(currentIndex.toInt < path.size) {
+        currentIndex += speed * delta
+        if(currentIndex.toInt +1 < path.size) {
+          val prev = path.get(currentIndex.toInt).pos
+          val target = path.get(currentIndex.toInt + 1).pos
+          val dir = prev - target
+          enemy.setAngle(Math.atan2(dir.y, dir.x).toFloat)
+          enemy.setPos(prev.lerp(target, currentIndex % 1f))
+        }
+      } else {
+        path.clear
+        currentIndex = 0f
+      }
+    }
   }
 
   override def reset: Unit = {
+    currentIndex = 0
+
     val start = enemy.getPos
     val end = Game.player.getPos
     /*
@@ -71,10 +112,12 @@ class AITrackPlayer(priority: Int, enemy: EntityEnemy) extends AITask(priority, 
 
 
     var goal: PathNode = null
+
+    val maxIterations = 100
+    var iterations = 0
     while(!frontier.isEmpty) {
       val current = frontier.poll()
-
-      if(current.pos == end) {
+      if(~(current.pos - end) <= 5f) {
         frontier.clear()
         goal = current
       } else {
@@ -82,21 +125,32 @@ class AITrackPlayer(priority: Int, enemy: EntityEnemy) extends AITask(priority, 
         for(i <- 0 until neighbors.size) {
           val neighbor = neighbors.get(i)
           val newCost = costSoFar.get(startNode) + computeCost(current, neighbor)
-          if(costSoFar.containsKey(neighbor) || newCost < costSoFar.get(neighbor)) {
+          if(!costSoFar.containsKey(neighbor) || newCost < costSoFar.get(neighbor)) {
             costSoFar.put(neighbor, newCost)
             val priority = newCost + heuristic(end, neighbor)
-            frontier.add(new PathNode(priority, neighbor.pos))
+            neighbor.priority = priority
+            frontier.add(neighbor)
             cameFrom.put(neighbor, current)
           }
         }
       }
+
+      iterations += 1
+
+      if(iterations >= maxIterations)
+      frontier.clear()
+
     }
 
     val finalList = new util.ArrayList[PathNode]
     var current = goal
     while(current != null) {
-      finalList.add(0,current)
+      val old = current
       current = cameFrom.get(current)
+      if(finalList.contains(current)) // avoid infinites loops
+        current = null
+
+      finalList.add(0,old)
     }
 
     path = finalList
