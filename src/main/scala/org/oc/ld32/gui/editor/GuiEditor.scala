@@ -54,7 +54,7 @@ class GuiEditor extends GuiScreen {
 
   def getAnim(id: String): Animation = {
     if(!anims.containsKey(id)) {
-      anims.put(id, new Animation(new TextureAtlas(s"assets/textures/entities/$id.png", 16, 16), 5f))
+      anims.put(id, new Animation(new TextureAtlas(s"assets/textures/entities/$id.png", 64, 64), 0f))
     }
     anims.get(id)
   }
@@ -145,6 +145,7 @@ class GuiEditor extends GuiScreen {
 
     for(enemy <- enemyDefinitions) {
       val anim: Animation = getAnim(enemy.id)
+      anim.update(delta)
       anim.transform.pos.set(enemy.x, enemy.y)
       anim.transform.angle = -(Math.PI/2f).toFloat
       anim.render(delta)
@@ -162,7 +163,7 @@ class GuiEditor extends GuiScreen {
     floorSprite.render(delta)
     nortapSprite.render(delta)
 
-    if(!dragging) {
+    if(!dragging && modalWindow == null) {
       var text = currentObject
       if(extraData != null) {
         text += s"($extraData)"
@@ -235,8 +236,6 @@ class GuiEditor extends GuiScreen {
     val title = "Choose floor type"
     val titleLabel = new GuiLabel(title, x + w/2f - Game.fontRenderer.getWidth(title)/2f, y+h-32f)
 
-    val selected = if(extraData != null) extraData else "carpet"
-
     // Create list:
     val list = scala.List("carpet", "dirt", "planks", "tiles", "wall")
     val elemSpace = w / list.size
@@ -267,6 +266,66 @@ class GuiEditor extends GuiScreen {
     elements.add(modalWindow)
   }
 
+  def showEnemyWindow(): Unit = {
+    val w = width/2f
+    val h = height/2f
+    val x = width/2f-w/2f
+    val y = height/2f-h/2f
+    val window = new ModalWindow(x,y,w,h)
+    val title = "Configure enemy"
+    val titleLabel = new GuiLabel(title, x + w/2f - Game.fontRenderer.getWidth(title)/2f, y+h-32f)
+
+    // Create list:
+    val idList = scala.List("nortap")
+    val aiList = scala.List("patrol", "wander")
+    val idElemSpace = w / idList.size
+    val aiElemSpace = w / aiList.size
+    var id = "nortap"
+    var ai = "patrol"
+    for(elem <- idList) {
+      val index = idList.indexOf(elem)
+      val imgX = index * idElemSpace + idElemSpace/2f
+      val imgY = h/2f+75f
+      val image = new GuiAnimation(x + imgX-64f/2f, y + imgY-64f/2f, new Animation(new TextureAtlas(s"assets/textures/entities/$elem.png", 64,64)))
+      window.add(image)
+
+      val button = new GuiButton(elem.capitalize, x + index * idElemSpace, y+imgY-64, idElemSpace, 64f*2f)
+      button.setHandler(button => {
+        id = elem
+      })
+      window.add(button)
+    }
+
+    for(elem <- aiList) {
+      val index = aiList.indexOf(elem)
+      val imgY = h/2f
+      val button = new GuiButton(elem.capitalize, x + index * aiElemSpace, y+imgY-64, aiElemSpace)
+      button.setHandler(button => {
+        ai = elem
+      })
+      window.add(button)
+    }
+
+    val confirmButton = new GuiButton("Confirm",x + w/2f-200f-10f, y +20f)
+    confirmButton.setHandler(button => {
+      currentObject = ENEMY
+      extraData = s"$id;$ai"
+      removeModalWindow
+    })
+
+    val cancelButton = new GuiButton("Cancel",x + w/2f + 10f, y + 20f)
+    cancelButton.setHandler(button => {
+      removeModalWindow
+    })
+
+    window.add(confirmButton)
+    window.add(cancelButton)
+    window.add(titleLabel)
+
+    modalWindow = window
+    elements.add(modalWindow)
+  }
+
   def onPressed: Unit = {
     if(modalWindow != null)
       return
@@ -286,17 +345,29 @@ class GuiEditor extends GuiScreen {
           floorDecorations.add(floor)
         }
 
+        case ENEMY => {
+          val id = extraData.split(";")(0)
+          val aiType = extraData.split(";")(1)
+          val enemy = new EnemyDef(id, aiType, cursor.x, cursor.y)
+          enemyDefinitions.add(enemy)
+        }
+
         case _ =>
       }
     } else {
       val index = (cursor.x/64f).toInt
-      currentObject = options(index)
       if(index < options.size) {
+        currentObject = options(index)
 
         currentObject match {
           case FLOOR => {
             extraData = "carpet"
             showFloorWindow()
+          }
+
+          case ENEMY => {
+            extraData = "nortap;patrol"
+            showEnemyWindow()
           }
 
           case _ => {
