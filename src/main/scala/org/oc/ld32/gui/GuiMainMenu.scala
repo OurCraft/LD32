@@ -12,6 +12,7 @@ class GuiMainMenu extends GuiScreen with ActionHandler {
   var startSprite: Sprite = _
   var gotoSprite: Sprite = _
   var editorSprite: Sprite = _
+  var optionsSprite: Sprite = _
   var quitSprite: Sprite = _
 
   var spriteList: List[Sprite] = _
@@ -32,6 +33,7 @@ class GuiMainMenu extends GuiScreen with ActionHandler {
     list.add("Start new game")
     list.add("Goto level")
     list.add("Editor")
+    list.add("Options")
     list.add("Quit game")
     selector = new GuiSelector(list, 10, 60)
     selector.shouldRender = false
@@ -40,9 +42,10 @@ class GuiMainMenu extends GuiScreen with ActionHandler {
     startSprite = new Sprite("assets/textures/gui/startNewGame.png")
     gotoSprite = new Sprite("assets/textures/gui/gotoLevel.png")
     editorSprite = new Sprite("assets/textures/gui/editor.png")
+    optionsSprite = new Sprite("assets/textures/gui/options.png");
     quitSprite = new Sprite("assets/textures/gui/quitGame.png")
 
-    spriteList = List(startSprite, gotoSprite, editorSprite, quitSprite)
+    spriteList = List(startSprite, gotoSprite, editorSprite, optionsSprite,  quitSprite)
   }
 
   def createTrailPart(sprite: Sprite): Sprite = {
@@ -89,10 +92,11 @@ class GuiMainMenu extends GuiScreen with ActionHandler {
     val w: Float = RenderEngine.displayWidth
     val h: Float = RenderEngine.displayHeight
 
-    startSprite.setPos(100f, h/2f+gotoSprite.height/2f+50 - 75)
-    gotoSprite.setPos(100f, h/2f-gotoSprite.height/2f - 75)
-    editorSprite.setPos(100f, h/2f-gotoSprite.height*1.5f-50 - 75)
-    quitSprite.setPos(100f, h/2f-gotoSprite.height*1.5f-50 - 100 - 75)
+    startSprite.setPos(100f, h/2f+startSprite.height/2f + 150)
+    gotoSprite.setPos(100f, h/2f-gotoSprite.height/2f + 100)
+    editorSprite.setPos(100f, h/2f-editorSprite.height*1.5f + 50)
+    optionsSprite.setPos(100f, h/2f-optionsSprite.height*1.5f - 50)
+    quitSprite.setPos(100f, h/2f-quitSprite.height*1.5f - 150)
 
     val selected = spriteList(selector.selectedIndex)
     if(lastSelected != selector.selectedIndex) {
@@ -105,6 +109,7 @@ class GuiMainMenu extends GuiScreen with ActionHandler {
     startSprite.render(delta)
     gotoSprite.render(delta)
     editorSprite.render(delta)
+    optionsSprite.render(delta)
     quitSprite.render(delta)
   }
 
@@ -118,6 +123,9 @@ class GuiMainMenu extends GuiScreen with ActionHandler {
       } else if (id == 2) {
         // Todo: editor
       } else if (id == 3) {
+        // Todo: options
+        Game.displayGuiScreen(new GuiOptions)
+      } else if (id == 4) {
         System.exit(1)
       }
     }

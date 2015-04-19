@@ -1,4 +1,4 @@
-package org.oc.ld32.input
+package org.oc.ld32.input.gamepad
 
 object LogitechMapping {
   val LEFT_X_AXIS = 3

@@ -1,13 +1,13 @@
 package org.oc.ld32
 
-import org.oc.ld32.gui.{GuiMainMenu, GuiIngame, GuiScreen}
-import org.oc.ld32.input.{Controls, LogitechMapping}
-import org.oc.ld32.level.BaguetteLevel
 import org.lengine.GameBase
 import org.lengine.maths.Vec2f
-import org.lengine.render.{Shader, RenderEngine, FontRenderer, TextureAtlas}
-import org.lwjgl.input.{Mouse, Controller, Keyboard}
+import org.lengine.render.{FontRenderer, RenderEngine, Shader, TextureAtlas}
+import org.lwjgl.input.{Controller, Mouse}
 import org.oc.ld32.entity.EntityPlayer
+import org.oc.ld32.gui.{GuiMainMenu, GuiScreen}
+import org.oc.ld32.input.gamepad.Controls
+import org.oc.ld32.input.keyboard.KeyControls
 import org.oc.ld32.level.{BaguetteLevel, LevelLoader}
 
 import scala.collection.JavaConversions._
@@ -27,16 +27,16 @@ object Game extends GameBase("Baguettes") {
       level.update(delta)
 
       if (!usingGamepad) {
-        if (isKeyPressed(Keyboard.KEY_LEFT)) {
+        if (isKeyPressed(KeyControls.getKeyCode("left"))) {
           player.walkLeft(delta)
         }
-        if (isKeyPressed(Keyboard.KEY_RIGHT)) {
+        if (isKeyPressed(KeyControls.getKeyCode("right"))) {
           player.walkRight(delta)
         }
-        if (isKeyPressed(Keyboard.KEY_UP)) {
+        if (isKeyPressed(KeyControls.getKeyCode("forward"))) {
           player.walkUp(delta)
         }
-        if (isKeyPressed(Keyboard.KEY_DOWN)) {
+        if (isKeyPressed(KeyControls.getKeyCode("back"))) {
           player.walkDown(delta)
         }
         val mousePos = player.getPos - new Vec2f(Mouse.getX, Mouse.getY)
@@ -61,6 +61,7 @@ object Game extends GameBase("Baguettes") {
   }
 
   override def initGame: Unit = {
+    KeyControls.init()
     postProcessShader = new Shader("assets/shaders/base.vsh", "assets/shaders/postProcess.fsh")
 
     fontRenderer = new FontRenderer(new TextureAtlas("assets/textures/font.png", 16, 16))
@@ -112,7 +113,7 @@ object Game extends GameBase("Baguettes") {
       val y: Float = player.getPos.y
       fontRenderer.renderString(s"pos: $x, $y", 0, getBaseHeight-17, 0xFFFFFFF, 1)
     }
-    fontRenderer.renderString("LD32: An Unconventional Weapon", 0, getBaseHeight-17-16, 0xFFFFFFF, 1)
+
     if (currentGui != null) currentGui.render(delta)
   }
 
