@@ -43,7 +43,7 @@ class GuiMainMenu extends GuiScreen with ActionHandler {
     startSprite = new Sprite("assets/textures/gui/startNewGame.png")
     gotoSprite = new Sprite("assets/textures/gui/gotoLevel.png")
     editorSprite = new Sprite("assets/textures/gui/editor.png")
-    optionsSprite = new Sprite("assets/textures/gui/options.png");
+    optionsSprite = new Sprite("assets/textures/gui/options.png")
     quitSprite = new Sprite("assets/textures/gui/quitGame.png")
 
     spriteList = List(startSprite, gotoSprite, editorSprite, optionsSprite,  quitSprite)
