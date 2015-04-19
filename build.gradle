@@ -2,7 +2,7 @@ apply plugin: 'scala'
 apply plugin: 'java'
 
 sourceCompatibility = 1.8
-version = '0.1.0'
+
 
 // Maven Artefacts Info
 group = "org.oc.ld32"
@@ -36,7 +36,7 @@ compileScala.options.encoding = 'UTF-8'
 
 tasks.withType(ScalaCompile) {
     scalaCompileOptions.useAnt = false
-    }
+}
 
 dependencies {
     compile 'org.scala-lang:scala-library:2.11.1'
