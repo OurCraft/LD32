@@ -1,9 +1,13 @@
-package org.oc.ld32.entity
+package org.oc.ld32.entity.ai
+
+import org.oc.ld32.entity.EntityEnemy
 
 object Tasks {
     def createFromID(entity: EntityEnemy, id: String, priority: Int = 1): AITask = {
       if(id.equals("patrol")) {
         new AIPatrol(priority, entity)
+      } else if(id.equals("wander")) {
+        new AIWander(priority, entity)
       } else {
         null
       }

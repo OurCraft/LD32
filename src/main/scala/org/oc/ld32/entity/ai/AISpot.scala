@@ -1,7 +1,8 @@
-package org.oc.ld32.entity
+package org.oc.ld32.entity.ai
 
 import org.lengine.maths.Vec2f
 import org.oc.ld32.Game
+import org.oc.ld32.entity.EntityEnemy
 
 class AISpot(priority: Int, entity: EntityEnemy) extends AITask(priority, entity) {
 

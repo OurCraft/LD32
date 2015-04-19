@@ -1,4 +1,6 @@
-package org.oc.ld32.entity
+package org.oc.ld32.entity.ai
+
+import org.oc.ld32.entity.EntityEnemy
 
 class AIPatrol(priority: Int, entity: EntityEnemy) extends AITask(priority, entity) {
 

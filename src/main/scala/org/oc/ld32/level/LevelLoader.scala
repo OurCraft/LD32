@@ -4,6 +4,7 @@ import com.google.gson.{JsonArray, JsonObject, Gson}
 import org.lengine.maths.Vec2f
 import org.lengine.utils.IOUtils
 import org.oc.ld32.entity._
+import org.oc.ld32.entity.ai.{AITrackPlayer, Tasks, AISpot}
 
 object LevelLoader {
 
@@ -82,11 +83,11 @@ object LevelLoader {
 
   def load(id: String): BaguetteLevel = {
     val json: String = IOUtils.read(s"assets/levels/$id.json", "UTF-8")
-    loadRaw(json)
+    loadRaw(json, id)
   }
 
-  def loadRaw(json: String): BaguetteLevel = {
-    val level: BaguetteLevel = new BaguetteLevel(json)
+  def loadRaw(json: String, id: String = "UNKNOWN"): BaguetteLevel = {
+    val level: BaguetteLevel = new BaguetteLevel(id)
     val levelData: JsonObject = gson.fromJson(json, classOf[JsonObject])
     if(levelData.has("baguettes")) {
       handleBaguetteData(level, levelData)

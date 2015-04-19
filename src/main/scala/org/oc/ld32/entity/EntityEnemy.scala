@@ -2,6 +2,8 @@ package org.oc.ld32.entity
 
 import java.util.{List, ArrayList}
 
+import org.oc.ld32.entity.ai.AITask
+
 class EntityEnemy(id: String) extends EntityBiped(id) {
   var target: EntityPlayer = null
 

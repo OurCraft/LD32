@@ -1,4 +1,4 @@
-package org.oc.ld32.entity
+package org.oc.ld32.entity.ai
 
 import java.util
 import java.util.{ArrayList, HashMap, List, PriorityQueue}
@@ -6,7 +6,7 @@ import java.util.{ArrayList, HashMap, List, PriorityQueue}
 import org.lengine.maths.Vec2f
 import org.lengine.render.RenderEngine
 import org.oc.ld32.Game
-import org.oc.ld32.entity.ai.PathNode
+import org.oc.ld32.entity.EntityEnemy
 import org.oc.ld32.level.BaguetteLevel
 import org.oc.ld32.maths.AABB
 
