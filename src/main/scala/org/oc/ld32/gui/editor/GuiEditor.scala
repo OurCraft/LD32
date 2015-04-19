@@ -4,9 +4,10 @@ import java.util
 
 import org.lengine.maths.Vec2f
 import org.lengine.render.{Sprite, TextureRegion, TextureAtlas}
+import org.lwjgl.input.Keyboard
 import org.oc.ld32.Game
-import org.oc.ld32.gui.GuiScreen
-import java.util.{List, ArrayList, Map, HashMap}
+import org.oc.ld32.gui._
+import java.util.{List, ArrayList, Map, HashMap, Stack}
 
 import org.oc.ld32.input.gamepad.Controls
 import org.oc.ld32.level.{FloorDecoration, Wall}
@@ -20,7 +21,8 @@ class GuiEditor extends GuiScreen {
   val ENEMY: String = "enemy"
   val FLOOR: String = "floor"
 
-  var currentObject: String = FLOOR
+  var currentObject: String = WALL
+  var extraData: String = null
 
   val options: scala.List[String] = scala.List(ENEMY, FLOOR, WALL)
 
@@ -36,7 +38,14 @@ class GuiEditor extends GuiScreen {
   var dragging = false
   var startDragX = 0f
   var startDragY = 0f
+  var modalWindow: ModalWindow = null
   val cursor: Vec2f = new Vec2f
+  var shouldRemoveWindow = false
+  val actionStack: Stack[String] = new Stack
+
+  val shadowSprite = new Sprite("assets/textures/gui/shadow.png")
+  shadowSprite.width = width
+  shadowSprite.height = height
 
   override def init(): Unit = {
     cursor.set(width/2f, height/2f)
@@ -48,6 +57,10 @@ class GuiEditor extends GuiScreen {
       anims.put(id, new Animation(new TextureAtlas(s"assets/textures/entities/$id.png", 16, 16), 5f))
     }
     anims.get(id)
+  }
+
+  override def render(delta: Float): Unit = {
+    renderScreen(delta)
   }
 
   def updateCursor(delta: Float) = {
@@ -71,10 +84,14 @@ class GuiEditor extends GuiScreen {
       cursor.y = height
     }
 
-    if(dragging) {
+    if(modalWindow != null) {
+      modalWindow.setCursorPos(cursor.x, cursor.y)
+    }
+
+    if(dragging && modalWindow == null) {
       currentObject match {
         case WALL => {
-          val wall = walls.remove(0)
+          val wall = walls.remove(walls.size - 1)
           var minX = 0f
           var minY = 0f
           var maxX = 0f
@@ -95,18 +112,18 @@ class GuiEditor extends GuiScreen {
             maxY = cursor.y
           }
 
-          val newWall = new Wall("", new Vec2f(minX, minY), new Vec2f(maxX, maxY))
-          walls.add(0, newWall)
+          val newWall = new Wall(wall.id, new Vec2f(minX, minY), new Vec2f(maxX, maxY))
+          walls.add(newWall)
         }
 
         case FLOOR => {
-          val floor = floorDecorations.remove(0)
+          val floor = floorDecorations.remove(floorDecorations.size - 1)
           val minX = (Math.min(cursor.x, startDragX)/16f).toInt * 16f
           val minY = (Math.min(cursor.y, startDragY)/16f).toInt * 16f
           val maxX = (Math.max(cursor.x, startDragX)/16f).toInt * 16f
           val maxY = (Math.max(cursor.y, startDragY)/16f).toInt * 16f
           val newFloor = new FloorDecoration(floor.id, minX, minY, maxX-minX, maxY-minY)
-          floorDecorations.add(0, newFloor)
+          floorDecorations.add(newFloor)
         }
 
         case _ =>
@@ -115,6 +132,11 @@ class GuiEditor extends GuiScreen {
   }
 
   override def renderScreen(delta: Float): Unit = {
+    if(shouldRemoveWindow) {
+      shouldRemoveWindow = false
+      elements.remove(modalWindow)
+      modalWindow = null
+    }
     updateCursor(delta)
 
     for(floor <- floorDecorations) {
@@ -139,6 +161,19 @@ class GuiEditor extends GuiScreen {
     wallSprite.render(delta)
     floorSprite.render(delta)
     nortapSprite.render(delta)
+
+    if(!dragging) {
+      var text = currentObject
+      if(extraData != null) {
+        text += s"($extraData)"
+      }
+      Game.fontRenderer.renderString(text, cursor.x, cursor.y, 0xFFFFFFFF, 1f)
+    }
+
+    if(modalWindow != null) {
+      shadowSprite.render(delta)
+      modalWindow.render(delta)
+    }
     if(showCursor) {
       cursorSprite.setPos(cursor.x - cursorSprite.width/2f, cursor.y - cursorSprite.height/2f)
       cursorSprite.render(delta)
@@ -159,11 +194,82 @@ class GuiEditor extends GuiScreen {
     onReleased
   }
 
-  override def onKeyReleased(keyCode: Int, char: Char): Unit = {
-    super.onKeyReleased(keyCode, char)
+  def rollBack: Unit = {
+    if(!actionStack.isEmpty) {
+      val lastAction = actionStack.pop
+      lastAction match {
+        case FLOOR => {
+          floorDecorations.remove(floorDecorations.size - 1)
+        }
+
+        case WALL => {
+          walls.remove(walls.size - 1)
+        }
+
+        case ENEMY => {
+          enemyDefinitions.remove(enemyDefinitions.size - 1)
+        }
+
+        case _ =>
+      }
+    }
   }
 
-  def onPressed = {
+  override def onKeyReleased(keyCode: Int, char: Char): Unit = {
+    super.onKeyReleased(keyCode, char)
+    if(keyCode == Keyboard.KEY_Z && Game.isKeyPressed(Keyboard.KEY_LCONTROL)) {
+      rollBack
+    }
+  }
+
+  def removeModalWindow(): Unit = {
+    shouldRemoveWindow = true
+  }
+
+  def showFloorWindow(): Unit = {
+    val w = width/2f
+    val h = height/2f
+    val x = width/2f-w/2f
+    val y = height/2f-h/2f
+    val window = new ModalWindow(x,y,w,h)
+    val title = "Choose floor type"
+    val titleLabel = new GuiLabel(title, x + w/2f - Game.fontRenderer.getWidth(title)/2f, y+h-32f)
+
+    val selected = if(extraData != null) extraData else "carpet"
+
+    // Create list:
+    val list = scala.List("carpet", "dirt", "planks", "tiles", "wall")
+    val elemSpace = w / list.size
+    for(elem <- list) {
+      val index = list.indexOf(elem)
+      val imgX = index * elemSpace + elemSpace/2f
+      val imgY = h/2f
+      val image = new GuiImage(x + imgX-64f/2f, y + imgY-64f/2f, 64f, 64f, s"assets/textures/levels/ground/$elem.png")
+      window.add(image)
+
+      val button = new GuiButton(elem.capitalize, x + index * elemSpace, y+imgY-64, elemSpace, 64f*2f)
+      button.setHandler(button => {
+        currentObject = FLOOR
+        extraData = elem
+        removeModalWindow
+      })
+      window.add(button)
+    }
+    val cancelButton = new GuiButton("Cancel",x + w/2f-100f, y +20f)
+    cancelButton.setHandler(button => {
+      removeModalWindow
+    })
+
+    window.add(cancelButton)
+    window.add(titleLabel)
+
+    modalWindow = window
+    elements.add(modalWindow)
+  }
+
+  def onPressed: Unit = {
+    if(modalWindow != null)
+      return
     if(cursor.y < height-64f) {
       dragging = true
       startDragX = cursor.x
@@ -172,25 +278,41 @@ class GuiEditor extends GuiScreen {
 
         case WALL => {
           val wall = new Wall("", new Vec2f(cursor.x, cursor.y), new Vec2f(cursor.x, cursor.y))
-          walls.add(0, wall)
+          walls.add(wall)
         }
 
         case FLOOR => {
-          val floor = new FloorDecoration("carpet", cursor.x, cursor.y, 16f, 16f)
-          floorDecorations.add(0, floor)
+          val floor = new FloorDecoration(extraData, cursor.x, cursor.y, 16f, 16f)
+          floorDecorations.add(floor)
         }
 
         case _ =>
       }
     } else {
       val index = (cursor.x/64f).toInt
+      currentObject = options(index)
       if(index < options.size) {
-        currentObject = options(index)
+
+        currentObject match {
+          case FLOOR => {
+            extraData = "carpet"
+            showFloorWindow()
+          }
+
+          case _ => {
+            extraData = null
+          }
+        }
       }
     }
   }
 
-  def onReleased = {
+  def onReleased: Unit = {
+    if(modalWindow != null)
+      return
+    if(cursor.y < height-64f) {
+      actionStack.push(currentObject)
+    }
     dragging = false
   }
 
@@ -220,6 +342,8 @@ class GuiEditor extends GuiScreen {
     super.onButtonReleased(button)
     if(Controls.isConfirmButton(button)) {
       onReleased
+    } else if(button == Controls.throwButton) {
+      rollBack
     }
   }
 }

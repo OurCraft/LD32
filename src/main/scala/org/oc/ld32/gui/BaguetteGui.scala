@@ -43,6 +43,10 @@ abstract class BaguetteGui {
 
   }
 
+  def setCursorPos(cx: Float, cy: Float): Unit = {
+
+  }
+
   implicit def toTexture(texture: String): Texture = {
     new Texture(texture)
   }
