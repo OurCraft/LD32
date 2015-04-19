@@ -1,8 +1,7 @@
 package org.oc.ld32.entity
 
-import java.io.File
 import java.util
-import java.util.{PriorityQueue, HashMap, List, ArrayList}
+import java.util.{ArrayList, HashMap, List, PriorityQueue}
 
 import org.lengine.maths.Vec2f
 import org.lengine.render.RenderEngine
@@ -17,13 +16,9 @@ class AITrackPlayer(priority: Int, enemy: EntityEnemy, speed: Float = 32f) exten
   var currentIndex: Float = 0
   var lastUpdated = 0f
 
-  override def shouldContinue: Boolean = {
-    enemy.target != null
-  }
+  override def shouldContinue: Boolean = enemy.target != null && !enemy.target.isDead()
 
-  override def canExecute: Boolean = {
-    enemy.target != null
-  }
+  override def canExecute: Boolean = enemy.target != null && !enemy.target.isDead()
 
   def computeNeighbors(node: PathNode): List[PathNode] = {
     val list = new util.ArrayList[PathNode]
@@ -53,6 +48,8 @@ class AITrackPlayer(priority: Int, enemy: EntityEnemy, speed: Float = 32f) exten
   }
 
   override def perform(delta: Float): Unit = {
+    enemy.attack(enemy.target)
+
     if(RenderEngine.time - lastUpdated >= 0.5f) {
       lastUpdated = RenderEngine.time
       reset

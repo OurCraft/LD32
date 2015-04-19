@@ -3,6 +3,7 @@ package org.oc.ld32.gui
 import java.util.{HashMap, Map}
 import org.lengine.render.{TextureRegion, Sprite, Texture}
 import org.oc.ld32.Game
+import org.oc.ld32.input.keyboard.KeyControls
 
 class GuiIngame extends GuiScreen {
 
@@ -27,6 +28,20 @@ class GuiIngame extends GuiScreen {
       val baguette: Sprite = getSprite(Game.player.baguetteCompletion)
       baguette.setPos(0,Game.getBaseHeight-baguette.height)
       baguette.render(delta)
+
+      if(Game.player.isDead())
+      {
+        this.fontRenderer.renderString("You are dead! Retry? [R]", 800, 600)
+      }
+
     }
+  }
+  override def onKeyPressed(keyCode: Int, char: Char): Unit = {
+    if(Game.player != null && Game.player.isDead() && keyCode == KeyControls.retry)
+    {
+      Game.loadLevel(Game.level.getName(), true)
+    }
+
+    super.onKeyPressed(keyCode, char)
   }
 }

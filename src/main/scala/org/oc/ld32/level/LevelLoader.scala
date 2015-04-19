@@ -81,7 +81,7 @@ object LevelLoader {
   }
 
   def load(id: String): BaguetteLevel = {
-    val level: BaguetteLevel = new BaguetteLevel
+    val level: BaguetteLevel = new BaguetteLevel(id)
     val json: String = IOUtils.read(s"assets/levels/$id.json", "UTF-8")
     val levelData: JsonObject = gson.fromJson(json, classOf[JsonObject])
     if(levelData.has("baguettes")) {

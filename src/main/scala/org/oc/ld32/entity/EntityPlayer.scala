@@ -1,11 +1,15 @@
 package org.oc.ld32.entity
 
-import org.lengine.render.{TextureAtlas, Sprite, Texture}
-import org.oc.ld32.level.BaguetteLevel
-import org.oc.ld32.render.Animation
-
-class EntityPlayer extends EntityBiped("player") {
+class EntityPlayer extends EntityBiped("player", 30f) {
 
   var baguetteCompletion: Float = 0f
+
+
+  override def getAttackRange(): Float = {
+    if(baguetteCompletion != 0f)
+      return attackRange + (baguetteCompletion * attackRange)
+    else
+      super.getAttackRange()
+  }
 
 }

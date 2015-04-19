@@ -8,7 +8,7 @@ import org.lengine.maths.Vec2f
 import org.oc.ld32.entity.{BaguetteEntity, EntityBaguettePiece}
 import org.oc.ld32.maths.AABB
 
-class BaguetteLevel extends Level {
+class BaguetteLevel(name: String) extends Level {
 
   var music: String = null
 
@@ -68,5 +68,7 @@ class BaguetteLevel extends Level {
     }
     true
   }
+
+  def getName(): String = name
 
 }

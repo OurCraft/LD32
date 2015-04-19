@@ -98,6 +98,7 @@ object Game extends GameBase("Baguettes") {
 
   override def onKeyPressed(keyCode: Int, char: Char): Unit = {
     if (currentGui != null) {
+      currentGui.onKeyPressed(keyCode, char)
       for (element <- currentGui.elements) {
         element.onKeyPressed(keyCode, char)
       }

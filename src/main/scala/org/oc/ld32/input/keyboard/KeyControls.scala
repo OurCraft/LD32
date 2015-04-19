@@ -11,7 +11,7 @@ import org.oc.ld32.Game
 import scala.collection.JavaConversions._
 
 object KeyControls {
-
+  var retry: Int = Keyboard.KEY_R
   var confirm: Int = Keyboard.KEY_RETURN
   var left: Int = Keyboard.KEY_LEFT
   var up: Int = Keyboard.KEY_UP
@@ -34,6 +34,7 @@ object KeyControls {
     defaultBinding.put("left", String.valueOf(left))
     defaultBinding.put("right", String.valueOf(right))
     defaultBinding.put("confirm", String.valueOf(confirm))
+    defaultBinding.put("retry", String.valueOf(retry))
 
     if(!conf.exists())
     {
@@ -68,6 +69,7 @@ object KeyControls {
     right = getKeyCode("right")
     down = getKeyCode("down")
     up = getKeyCode("up")
+    retry = getKeyCode("retry")
 
 
     reader.close()

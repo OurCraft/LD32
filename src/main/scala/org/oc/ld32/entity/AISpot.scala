@@ -7,13 +7,9 @@ class AISpot(priority: Int, entity: EntityEnemy) extends AITask(priority, entity
 
   var countdown = 0f
 
-  override def shouldContinue: Boolean = {
-    true
-  }
+  override def shouldContinue: Boolean = !Game.player.isDead()
 
-  override def canExecute: Boolean = {
-    true
-  }
+  override def canExecute: Boolean = !Game.player.isDead()
 
   override def perform(delta: Float): Unit = {
     val player = Game.player
