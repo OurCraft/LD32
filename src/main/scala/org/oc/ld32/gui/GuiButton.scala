@@ -42,7 +42,7 @@ class GuiButton(var text: String, var x: Float, var y: Float, var w: Float = 200
       }
       focused = false
     }
-  }
+}
 
   override def onMousePressed(x: Int, y: Int, button: Int): Unit = {
     if(mouseOn) {
