@@ -379,6 +379,7 @@ class GuiEditor extends GuiScreen {
 
   def writeLevel(out: Writer): Unit = {
     val writer = new JsonWriter(new BufferedWriter(out))
+    writer.setIndent("    ")
     writer.beginObject()
 
     writer.name("spawnpoint")
