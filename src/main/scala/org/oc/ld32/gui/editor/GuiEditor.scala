@@ -20,6 +20,7 @@ class GuiEditor extends GuiScreen {
   val WALL: String = "wall"
   val ENEMY: String = "enemy"
   val FLOOR: String = "floor"
+  val SPAWNPOINT: String = "spawnpoint"
   val BAGUETTE: String = "baguette"
   val RUN: String = "run"
   val SAVE: String = "save"
@@ -27,7 +28,7 @@ class GuiEditor extends GuiScreen {
   var currentObject: String = WALL
   var extraData: String = null
 
-  val options: scala.List[String] = scala.List(ENEMY, FLOOR, WALL, BAGUETTE, RUN, SAVE)
+  val options: scala.List[String] = scala.List(ENEMY, FLOOR, WALL, BAGUETTE, SPAWNPOINT, RUN, SAVE)
 
   val walls: List[Wall] = new ArrayList
   val floorDecorations: List[FloorDecoration] = new ArrayList
@@ -35,6 +36,7 @@ class GuiEditor extends GuiScreen {
   val baguettes: List[BaguetteDef] = new ArrayList
   val anims: Map[String, Animation] = new HashMap
   val nortapSprite = new Sprite("assets/textures/entities/nortap.png", new TextureRegion(0,0,1,1f/4f))
+  val playerSprite = new Sprite("assets/textures/entities/player.png", new TextureRegion(0,0,1,1f/4f))
   val floorSprite = new Sprite("assets/textures/gui/editorFloor.png")
   val wallSprite = new Sprite("assets/textures/gui/editorWalls.png")
   val testSprite = new Sprite("assets/textures/gui/editorTest.png")
@@ -44,6 +46,7 @@ class GuiEditor extends GuiScreen {
   val arrowSprite = new Sprite("assets/textures/gui/editorArrow.png")
   arrowSprite.setCenter(new Vec2f(0, arrowSprite.height/2f))
 
+  val spawnpoint = new Vec2f
   var showCursor = false
   var dragging = false
   var startDragX = 0f
@@ -52,6 +55,7 @@ class GuiEditor extends GuiScreen {
   val cursor: Vec2f = new Vec2f
   var shouldRemoveWindow = false
   var rotation = 0f
+  var spawnAngle = 0f
   val actionStack: Stack[String] = new Stack
 
   val shadowSprite = new Sprite("assets/textures/gui/shadow.png")
@@ -174,6 +178,10 @@ class GuiEditor extends GuiScreen {
       anim.render(delta)
     }
 
+    playerSprite.setPos(spawnpoint.x-32f, spawnpoint.y-32f)
+    playerSprite.setAngle(spawnAngle-(Math.PI/2f).toFloat)
+    playerSprite.render(delta)
+
     for(wall <- walls) {
       wall.render(delta)
     }
@@ -182,16 +190,19 @@ class GuiEditor extends GuiScreen {
     floorSprite.setPos(64f,height-nortapSprite.height)
     wallSprite.setPos(128f,height-nortapSprite.height)
     baguetteSprite.setPos(128+64f,height-nortapSprite.height)
-    testSprite.setPos(256f,height-nortapSprite.height)
-    saveSprite.setPos(256f+64f,height-nortapSprite.height)
+    playerSprite.setPos(256f,height-nortapSprite.height)
+    testSprite.setPos(256f+64f,height-nortapSprite.height)
+    saveSprite.setPos(256f+128f,height-nortapSprite.height)
 
     baguetteSprite.setAngle(0)
+    playerSprite.setAngle(0)
 
     wallSprite.render(delta)
     floorSprite.render(delta)
     saveSprite.render(delta)
     testSprite.render(delta)
     nortapSprite.render(delta)
+    playerSprite.render(delta)
     baguetteSprite.render(delta)
     arrowSprite.render(delta)
 
@@ -371,9 +382,12 @@ class GuiEditor extends GuiScreen {
 
     writer.name("spawnpoint")
     writer.beginArray()
-    writer.value(0)
-    writer.value(0) // Todo: true spawnpoint
+    writer.value(spawnpoint.x)
+    writer.value(spawnpoint.y)
     writer.endArray()
+
+    writer.name("spawnangle")
+    writer.value(spawnAngle)
 
     writer.name("music")
     writer.value("Night Shift - Möbius") // todo: true music
@@ -553,6 +567,11 @@ class GuiEditor extends GuiScreen {
 
         case BAGUETTE => {
           baguettes.add(new BaguetteDef(java.lang.Float.parseFloat(extraData), cursor.x-32f, cursor.y-32f, rotation))
+        }
+
+        case SPAWNPOINT => {
+          spawnpoint.set(cursor)
+          spawnAngle = rotation
         }
 
         case _ =>
