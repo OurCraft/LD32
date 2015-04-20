@@ -8,6 +8,9 @@ class EntityPlayer extends EntityBiped("player", 30f) {
   var baguetteCompletion: Float = 0f
   val halfBaguette = new Animation(new TextureAtlas(new Texture(s"assets/textures/entities/player_half.png"), 64,64))
   val fullBaguette = new Animation(new TextureAtlas(new Texture(s"assets/textures/entities/player_full.png"), 64,64))
+
+  fullBaguette.speed = 5f
+  halfBaguette.speed = 5f
   val none = anim
 
   override def update(delta: Float): Unit = {

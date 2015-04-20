@@ -5,10 +5,12 @@ import java.util.{ArrayList, List}
 import org.lengine.entity.Entity
 import org.lengine.level.Level
 import org.lengine.maths.Vec2f
-import org.oc.ld32.entity.{BaguetteEntity, EntityBaguettePiece}
+import org.oc.ld32.entity.{EntityEnemy, BaguetteEntity, EntityBaguettePiece}
 import org.oc.ld32.maths.AABB
 
 class BaguetteLevel(name: String) extends Level {
+
+  var numberEnemies = 0
 
   var music: String = null
 
@@ -23,6 +25,11 @@ class BaguetteLevel(name: String) extends Level {
 
   val walls: List[Wall] = new ArrayList[Wall]
   val floorDecorations: List[FloorDecoration] = new ArrayList
+
+  override def update(delta: Float): Unit = {
+    numberEnemies = 0
+    super.update(delta)
+  }
 
   override def onEntityUpdate(entity: Entity, delta: Float) = {
     entity match {
@@ -40,6 +47,14 @@ class BaguetteLevel(name: String) extends Level {
             }
           }
         }
+
+        current match {
+          case enemy: EntityEnemy => {
+            numberEnemies += 1
+          }
+          case _ =>
+        }
+
       case _ =>
     }
   }

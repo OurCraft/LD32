@@ -66,6 +66,11 @@ object Game extends GameBase("Baguettes") {
           player.attack()
         }
       }
+
+      if(level.numberEnemies == 0 && player.baguetteCompletion >= 1f) {
+        displayGuiScreen(new GuiLevelCleared(currentGui))
+        isPaused = true
+      }
     }
   }
 
