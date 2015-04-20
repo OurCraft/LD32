@@ -17,7 +17,7 @@ class AISpot(priority: Int, entity: EntityEnemy) extends AITask(priority, entity
     val dir = entity.getPos + new Vec2f(entity.boundingBox.width/2f, entity.boundingBox.height/2f) - (player.getPos + new Vec2f(player.boundingBox.width/2f, player.boundingBox.height/2f))
     val dist = ~dir
     if(dist <= 10f*64f) {
-      val angle = Math.atan2(dir.y, dir.x) - entity.getAngle
+      val angle = (Math.atan2(dir.y, dir.x) + entity.getAngle) % (Math.PI*2f).toFloat - (Math.PI).toFloat
       if(Math.abs(angle) <= Math.PI/4f) {
         entity.target = player
         countdown = delta*60f

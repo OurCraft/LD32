@@ -1,14 +1,15 @@
 package org.oc.ld32.entity
 
-import org.lengine.render.{Texture, TextureAtlas}
+import org.lengine.render.{RenderEngine, Texture, TextureAtlas}
 import org.oc.ld32.level.BaguetteLevel
 import org.oc.ld32.render.Animation
 
-abstract class EntityBiped(id: String, range: Float = 10.0F) extends BaguetteEntity {
+abstract class EntityBiped(id: String, range: Float = 16.0F) extends BaguetteEntity {
 
-  val anim = new Animation(new TextureAtlas(new Texture(s"assets/textures/entities/$id.png"), 64,64))
+  var anim = new Animation(new TextureAtlas(new Texture(s"assets/textures/entities/$id.png"), 64,64))
   val legAnim = new Animation(new TextureAtlas(new Texture(s"assets/textures/entities/$id"+"_legs.png"), 64,64))
   val attackRange: Float = range
+  var lastAttack = 0f
 
   private var dead = false
 
@@ -80,17 +81,22 @@ abstract class EntityBiped(id: String, range: Float = 10.0F) extends BaguetteEnt
   def getAttackRange(): Float = attackRange
 
 
-  def attack(target: EntityBiped): Unit =
-  {
-    if(target == null) return
+  def attack(): Unit = {
 
-    /* Heretic
-    var distance: Float = ~(this.getPos - target.getPos)
+    if(RenderEngine.time - lastAttack >= 1f) {
+      lastAttack = RenderEngine.time
+      val x = getPos.x + boundingBox.width / 2f
+      val y = getPos.y + boundingBox.height / 2f
+      val maxX = (x + attackRange * -Math.cos(getAngle)).toFloat
+      val maxY = (y + attackRange * -Math.sin(getAngle)).toFloat
 
-    if(distance < getAttackRange())
-      target.die()*/
+      val vx = movingDir.x*10f
+      val vy = movingDir.y*10f
+      val attackEntity = new EntityAttack(this, x+vx, y+vy, maxX - x, maxY - y)
+      level spawn attackEntity
+    }
 
-    var x = -1f
+/*    var x = -1f
     var y = -1f
     if(this.lastX > target.lastX)
       x = Math.abs(this.lastX - target.lastX)
@@ -105,7 +111,7 @@ abstract class EntityBiped(id: String, range: Float = 10.0F) extends BaguetteEnt
     if(x == -1 || y == -1) return
 
     if(x < getAttackRange() && y < getAttackRange())
-      target.die()
+      target.die()*/
 
   }
 }

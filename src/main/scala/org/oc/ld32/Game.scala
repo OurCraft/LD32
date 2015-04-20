@@ -41,6 +41,10 @@ object Game extends GameBase("Baguettes") {
         }
         val mousePos = player.getPos - new Vec2f(Mouse.getX, Mouse.getY)
         player.setAngle(Math.atan2(mousePos.y, mousePos.x).toFloat)
+
+        if(Mouse.isButtonDown(0)) {
+          player.attack()
+        }
       } else {
         val threshold = 0.10
         val xMove = getAxisValue(Controls.moveX)
@@ -56,6 +60,10 @@ object Game extends GameBase("Baguettes") {
         val angle = Math.atan2(lookY, -lookX)
         if(Math.abs(lookX) >= threshold || Math.abs(lookY) >= threshold)
           player.setAngle(angle.toFloat)
+
+        if(isButtonPressed(Controls.attack)) {
+          player.attack()
+        }
       }
     }
   }

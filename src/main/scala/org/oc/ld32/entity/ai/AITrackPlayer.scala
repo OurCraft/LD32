@@ -48,8 +48,6 @@ class AITrackPlayer(priority: Int, enemy: EntityEnemy, speed: Float = 32f) exten
   }
 
   override def perform(delta: Float): Unit = {
-    enemy.attack(enemy.target)
-
     if(RenderEngine.time - lastUpdated >= 0.5f) {
       lastUpdated = RenderEngine.time
       reset
@@ -89,7 +87,7 @@ class AITrackPlayer(priority: Int, enemy: EntityEnemy, speed: Float = 32f) exten
 
     var goal: PathNode = null
 
-    val maxIterations = 100
+    val maxIterations = 500
     var iterations = 0
     while(!frontier.isEmpty) {
       val current = frontier.poll()

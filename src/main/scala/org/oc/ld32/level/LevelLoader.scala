@@ -4,7 +4,7 @@ import com.google.gson.{JsonArray, JsonObject, Gson}
 import org.lengine.maths.Vec2f
 import org.lengine.utils.IOUtils
 import org.oc.ld32.entity._
-import org.oc.ld32.entity.ai.{AITrackPlayer, Tasks, AISpot}
+import org.oc.ld32.entity.ai.{AIAttack, AITrackPlayer, Tasks, AISpot}
 
 object LevelLoader {
 
@@ -77,6 +77,8 @@ object LevelLoader {
       enemy.aiList.add(new AISpot(1, enemy))
 
       enemy.aiList.add(new AITrackPlayer(1, enemy))
+
+      enemy.aiList.add(new AIAttack(1, enemy))
       level spawn enemy
     }
   }
