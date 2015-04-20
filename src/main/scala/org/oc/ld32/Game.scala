@@ -1,7 +1,7 @@
 package org.oc.ld32
 
 import org.lengine.GameBase
-import org.lengine.maths.Vec2f
+import org.lengine.maths.{Mat4f, Vec2f}
 import org.lengine.render.{FontRenderer, RenderEngine, Shader, TextureAtlas}
 import org.lwjgl.input.{Controller, Mouse}
 import org.lwjgl.openal.AL10
@@ -10,6 +10,7 @@ import org.oc.ld32.gui.{GuiMainMenu, GuiScreen}
 import org.oc.ld32.input.gamepad.Controls
 import org.oc.ld32.input.keyboard.KeyControls
 import org.oc.ld32.level.{BaguetteLevel, LevelLoader}
+import org.oc.ld32.render.Camera
 
 import scala.collection.JavaConversions._
 
@@ -23,57 +24,53 @@ object Game extends GameBase("Baguettes") {
   var isPaused = false
   var currentMusic: String = null
   var lastMusicCheck = 0f
+  var camera: Camera = null
 
   override def getBaseHeight: Int = 640
 
   override def update(delta: Float): Unit = {
-    if(RenderEngine.time - lastMusicCheck >= 1f/20f) {
-      lastMusicCheck = RenderEngine.time
-      if (currentMusic != null && !soundManager.activeSounds.containsKey(s"musics/$currentMusic.wav")) {
-        println("relaunching")
-        playMusic(currentMusic)
-      }
-    }
     if (level != null && !isPaused) {
       level.update(delta)
 
-      if (!usingGamepad) {
-        if (isKeyPressed(KeyControls.left)) {
-          player.walkLeft(delta)
-        }
-        if (isKeyPressed(KeyControls.right)) {
-          player.walkRight(delta)
-        }
-        if (isKeyPressed(KeyControls.up)) {
-          player.walkUp(delta)
-        }
-        if (isKeyPressed(KeyControls.down)) {
-          player.walkDown(delta)
-        }
-        val mousePos = player.getPos - new Vec2f(Mouse.getX, Mouse.getY)
-        player.setAngle(Math.atan2(mousePos.y, mousePos.x).toFloat)
+      if(!player.isDead()) {
+        if (!usingGamepad) {
+          if (isKeyPressed(KeyControls.left)) {
+            player.walkLeft(delta)
+          }
+          if (isKeyPressed(KeyControls.right)) {
+            player.walkRight(delta)
+          }
+          if (isKeyPressed(KeyControls.up)) {
+            player.walkUp(delta)
+          }
+          if (isKeyPressed(KeyControls.down)) {
+            player.walkDown(delta)
+          }
+          val mousePos = player.getPos - new Vec2f(Mouse.getX, Mouse.getY)
+          player.setAngle(Math.atan2(mousePos.y, mousePos.x).toFloat)
 
-        if(Mouse.isButtonDown(0)) {
-          player.attack()
-        }
-      } else {
-        val threshold = 0.10
-        val xMove = getAxisValue(Controls.moveX)
-        if(Math.abs(xMove) >= threshold)
-          player.walkRight(delta, xMove*2f)
+          if(Mouse.isButtonDown(0) && !player.isDead()) {
+            player.attack()
+          }
+        } else {
+          val threshold = 0.10
+          val xMove = getAxisValue(Controls.moveX)
+          if(Math.abs(xMove) >= threshold)
+            player.walkRight(delta, xMove*2f)
 
-        val yMove = -getAxisValue(Controls.moveY)
-        if(Math.abs(yMove) >= threshold)
-          player.walkUp(delta, yMove*2f)
+          val yMove = -getAxisValue(Controls.moveY)
+          if(Math.abs(yMove) >= threshold)
+            player.walkUp(delta, yMove*2f)
 
-        val lookX = getAxisValue(Controls.lookX)
-        val lookY = getAxisValue(Controls.lookY)
-        val angle = Math.atan2(lookY, -lookX)
-        if(Math.abs(lookX) >= threshold || Math.abs(lookY) >= threshold)
-          player.setAngle(angle.toFloat)
+          val lookX = getAxisValue(Controls.lookX)
+          val lookY = getAxisValue(Controls.lookY)
+          val angle = Math.atan2(lookY, -lookX)
+          if(Math.abs(lookX) >= threshold || Math.abs(lookY) >= threshold)
+            player.setAngle(angle.toFloat)
 
-        if(isButtonPressed(Controls.attack)) {
-          player.attack()
+          if(isButtonPressed(Controls.attack)) {
+            player.attack()
+          }
         }
       }
 
@@ -94,11 +91,16 @@ object Game extends GameBase("Baguettes") {
 
     if (currentGui != null) currentGui.init()
     displayGuiScreen(new GuiMainMenu)
+
+    camera = new Camera
   }
 
   def playMusic(id: String): Unit = {
-   // soundManager.play(s"musics/$id.wav")
-    currentMusic = id
+    val sourceID = s"musics/$id.ogg"
+    val url = ClassLoader.getSystemResource("assets/sounds/" + sourceID)
+    soundManager.stop("music")
+    soundManager.play(url, "music", loop = true)
+    currentMusic = sourceID
     lastMusicCheck = RenderEngine.time
   }
 
@@ -117,11 +119,7 @@ object Game extends GameBase("Baguettes") {
   }
 
   def stopAllSounds() = {
-    for(sound <- soundManager.activeSounds) {
-      val source = sound._2
-      sound._2.getChannel.stop()
-      soundManager.stop(source.getName)
-    }
+    soundManager.stopAll()
   }
 
   def loadRawLevel(json: String, reloadMusic: Boolean = false): Unit = {
@@ -164,7 +162,12 @@ object Game extends GameBase("Baguettes") {
   override def render(delta: Float): Unit = {
     RenderEngine.clearColorBuffer(1f/15f,1f/40f,1f/20f,1)
     if(level != null ) {
+      if(player != null) {
+        camera.setPos(player.getPos - (RenderEngine.displayWidth/2f, RenderEngine.displayHeight/2f) + (player.boundingBox.width/2f, player.boundingBox.height/2f))
+        camera.update()
+      }
       level.render(delta)
+      RenderEngine.setTransformMatrix(new Mat4f().identity)
       val x: Float = player.getPos.x
       val y: Float = player.getPos.y
       fontRenderer.renderString(s"pos: $x, $y", 0, getBaseHeight-17, 0xFFFFFFF, 1)

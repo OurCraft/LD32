@@ -90,8 +90,8 @@ abstract class EntityBiped(id: String, range: Float = 16.0F) extends BaguetteEnt
       val maxX = (x + attackRange * -Math.cos(getAngle)).toFloat
       val maxY = (y + attackRange * -Math.sin(getAngle)).toFloat
 
-      val vx = movingDir.x*10f
-      val vy = movingDir.y*10f
+      val vx = ~(movingDir) * 10f * (-Math.cos(getAngle)).toFloat
+      val vy = ~(movingDir) * 10f * (-Math.sin(getAngle)).toFloat
       val attackEntity = new EntityAttack(this, x+vx, y+vy, maxX - x, maxY - y)
       level spawn attackEntity
     }
