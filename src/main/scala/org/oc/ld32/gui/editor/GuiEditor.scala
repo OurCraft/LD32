@@ -64,6 +64,7 @@ class GuiEditor extends GuiScreen {
 
   baguetteSprite.width *= 2f
   baguetteSprite.height *= 2f
+  baguetteSprite.getCenter() *= 2f
 
   override def init(): Unit = {
     cursor.set(width/2f, height/2f)
