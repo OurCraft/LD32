@@ -3,7 +3,7 @@ package org.oc.ld32.gui
 import org.oc.ld32.Game
 import org.oc.ld32.input.gamepad.Controls
 
-class GuiButton(var text: String, var x: Float, var y: Float, var w: Float = 200f, var h: Float =  32f) extends BaguetteGui {
+class GuiButton(var text: String, var x: Float, var y: Float, var w: Float = 200f, var h: Float =  32f, var yOffset: Float = 8f) extends BaguetteGui {
 
   var mouseOn = false
   var focused = false
@@ -18,7 +18,7 @@ class GuiButton(var text: String, var x: Float, var y: Float, var w: Float = 200
     if(mouseOn)
       color = 0xFFF9FF4C
     val textX = x + w/2f - getWidth(text)/2f
-    val textY = y + 8f
+    val textY = y + yOffset
     Game.fontRenderer.renderString(text, textX, textY, color)
   }
 

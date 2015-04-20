@@ -1,8 +1,9 @@
 package org.oc.ld32.gui
 
+import java.util
 import java.util.{HashMap, Map}
-import org.lengine.render.{TextureRegion, Sprite, Texture}
-import org.lwjgl.input.Keyboard
+
+import org.lengine.render.{Sprite, Texture, TextureRegion}
 import org.oc.ld32.Game
 import org.oc.ld32.gui.editor.GuiEditor
 import org.oc.ld32.input.keyboard.KeyControls
@@ -12,6 +13,8 @@ class GuiIngame extends GuiScreen {
   val map: Map[Float, Sprite] = new HashMap
   val texture: Texture = "assets/textures/gui/baguette.png"
   var guiEditor: GuiEditor = _
+
+  var toRemove = new util.ArrayList[BaguetteGui]()
 
   def this(guiEditor: GuiEditor) {
     this()
@@ -33,6 +36,8 @@ class GuiIngame extends GuiScreen {
   }
 
   override def renderScreen(delta: Float): Unit = {
+    elements removeAll toRemove
+    toRemove.clear()
     if(Game.player != null) {
       val baguette: Sprite = getSprite(Game.player.baguetteCompletion)
       baguette.setPos(0,Game.getBaseHeight-baguette.height)
@@ -40,12 +45,7 @@ class GuiIngame extends GuiScreen {
 
 
       if (Game.isPaused) {
-        this.fontRenderer.renderString("Pause", 800, 300, 0xFFFFFFFF, 2f)
-        this.fontRenderer.renderString("Resume (Enter)", 800, 270)
-        if(guiEditor != null)
-          this.fontRenderer.renderString("Return to Editor (Q)", 800, 245)
-        else
-          this.fontRenderer.renderString("Quit (Q)", 800, 245)
+        this.fontRenderer.renderString("Pause", 800, 310, 0xFFFFFFFF, 2f)
       }
       else if(Game.player.isDead())
       {
@@ -63,21 +63,35 @@ class GuiIngame extends GuiScreen {
     else if(!Game.isPaused && keyCode == KeyControls.pause)
     {
       Game.pause()
+      val resumeButton: GuiButton = new GuiButton("Resume", 775, 270)
+      resumeButton.setHandler(button => {
+        Game.resume()
+        toRemove.addAll(elements)
+      })
+
+      elements.add(resumeButton)
+
+      var quitButton: GuiButton = new GuiButton("Quit", 775, 230)
+      if(guiEditor != null)
+        quitButton = new GuiButton("Return to Editor", 800, 245)
+
+      quitButton.setHandler(button => {
+        Game.level = null
+        Game.player = null
+        Game.resume()
+        if(guiEditor != null)
+          Game.displayGuiScreen(this.guiEditor)
+        else
+          Game.displayGuiScreen(new GuiMainMenu)
+
+        toRemove.add(button)
+      })
+      elements.add(quitButton)
     }
-    else if(keyCode == KeyControls.pause || keyCode == KeyControls.confirm)
+    else if(keyCode == KeyControls.pause)
     {
       Game.resume()
       elements.clear()
-    }
-    else if(keyCode == Keyboard.KEY_Q)
-    {
-      Game.level = null
-      Game.player = null
-      Game.resume()
-      if(guiEditor != null)
-        Game.displayGuiScreen(this.guiEditor)
-      else
-        Game.displayGuiScreen(new GuiMainMenu)
     }
 
     super.onKeyPressed(keyCode, char)

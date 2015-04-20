@@ -37,6 +37,7 @@ object KeyControls {
     defaultBinding.put("right", String.valueOf(right))
     defaultBinding.put("confirm", String.valueOf(confirm))
     defaultBinding.put("retry", String.valueOf(retry))
+    defaultBinding.put("return", String.valueOf(pause))
 
     if(!conf.exists())
     {
@@ -66,13 +67,7 @@ object KeyControls {
       keys = configObject.get("keys").asInstanceOf[util.Map[String, String]]
     }
 
-    confirm = getKeyCode("confirm")
-    left = getKeyCode("left")
-    right = getKeyCode("right")
-    down = getKeyCode("down")
-    up = getKeyCode("up")
-    retry = getKeyCode("retry")
-
+    this.reloadFromConfig
 
     reader.close()
   }
@@ -81,6 +76,17 @@ object KeyControls {
     val writer: FileWriter = new FileWriter(conf)
     gson.toJson(this, writer)
     writer.close()
+  }
+
+  def reloadFromConfig(): Unit =
+  {
+    confirm = getKeyCode("confirm")
+    left = getKeyCode("left")
+    right = getKeyCode("right")
+    down = getKeyCode("down")
+    up = getKeyCode("up")
+    retry = getKeyCode("retry")
+    pause = getKeyCode("return")
   }
 
   def getKeyCode(name: String) : Int = {

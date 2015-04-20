@@ -30,6 +30,7 @@ class GuiOptionsButton(id: String, i: Int, i1: Int) extends GuiButton(id.toUpper
       KeyControls.keys.put(id, keyCode.toString)
       text = id.toUpperCase + " - " + Keyboard.getKeyName(keyCode)
       KeyControls.saveConfig()
+      KeyControls.reloadFromConfig()
       activated = false
     }
 
