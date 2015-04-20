@@ -25,7 +25,7 @@
   ],
 
   "enemies": [
-    {"id": "nortap", "x": 118, "y": 38, "ai": "wander"}
+    {"id": "nortap", "x": 118, "y": 38, "ai": "patrol"}
   ],
 
   "followingLevel": "testLevel1",

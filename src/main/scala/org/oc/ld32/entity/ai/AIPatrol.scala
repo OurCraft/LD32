@@ -2,7 +2,7 @@ package org.oc.ld32.entity.ai
 
 import org.oc.ld32.entity.EntityEnemy
 
-class AIPatrol(priority: Int, entity: EntityEnemy) extends AITask(priority, entity) {
+class AIPatrol(priority: Int, entity: EntityEnemy, speed: Float = 0.5f) extends AITask(priority, entity) {
 
   val LEFT = 0
   val RIGHT = 1
@@ -41,25 +41,25 @@ class AIPatrol(priority: Int, entity: EntityEnemy) extends AITask(priority, enti
   override def perform(delta: Float): Unit = {
     list(index) match {
       case LEFT => {
-        if(!entity.walkLeft(delta)) {
+        if(!entity.walkLeft(delta, speed)) {
           nextDirection
         }
       }
 
       case UP => {
-        if(!entity.walkUp(delta)) {
+        if(!entity.walkUp(delta, speed)) {
           nextDirection
         }
       }
 
       case RIGHT => {
-        if (!entity.walkRight(delta)) {
+        if (!entity.walkRight(delta, speed)) {
           nextDirection
         }
       }
 
       case DOWN => {
-        if(!entity.walkDown(delta)) {
+        if(!entity.walkDown(delta, speed)) {
           nextDirection
         }
       }

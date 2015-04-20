@@ -99,7 +99,7 @@ object Game extends GameBase("Baguettes") {
     val sourceID = s"musics/$id.ogg"
     val url = ClassLoader.getSystemResource("assets/sounds/" + sourceID)
     soundManager.stop("music")
-    soundManager.play(url, "music", loop = true)
+  //  soundManager.play(url, "music", loop = true)
     currentMusic = sourceID
     lastMusicCheck = RenderEngine.time
   }
