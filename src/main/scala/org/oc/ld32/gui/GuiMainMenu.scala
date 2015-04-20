@@ -126,6 +126,7 @@ class GuiMainMenu extends GuiScreen with ActionHandler {
       } else if (id == 3) {
         Game.displayGuiScreen(new GuiOptions)
       } else if (id == 4) {
+        Game.soundManager.cleanup()
         System.exit(0)
       }
     }

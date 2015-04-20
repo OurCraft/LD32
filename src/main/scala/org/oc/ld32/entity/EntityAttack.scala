@@ -36,12 +36,10 @@ class EntityAttack(owner: EntityBiped, x: Float, y: Float, w: Float, h: Float) e
   }
 
   override def onCollide(other: BaguetteEntity): Unit = {
-    println(other)
     if (other != owner) {
       other match {
         case biped: EntityBiped => {
           biped.die()
-          println("ded")
           level despawn this
         }
 

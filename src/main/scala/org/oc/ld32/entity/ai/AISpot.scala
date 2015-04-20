@@ -1,8 +1,7 @@
 package org.oc.ld32.entity.ai
 
-import org.lengine.maths.Vec2f
 import org.oc.ld32.Game
-import org.oc.ld32.entity.{EntityPlayer, EntityEnemy}
+import org.oc.ld32.entity.{EntityEnemy, EntityPlayer}
 import org.oc.ld32.level.BaguetteLevel
 import org.oc.ld32.maths.AABB
 
@@ -26,7 +25,6 @@ class AISpot(priority: Int, entity: EntityEnemy) extends AITask(priority, entity
       if(lvl.canGoTo(testBox, currentPos.x-4f, currentPos.y-4f)) {
         currentPos += dir
       } else {
-        println(s"nope :( $currentPos")
         return true
       }
     }

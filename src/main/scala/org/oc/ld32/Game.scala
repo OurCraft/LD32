@@ -4,7 +4,6 @@ import org.lengine.GameBase
 import org.lengine.maths.{Mat4f, Vec2f}
 import org.lengine.render.{FontRenderer, RenderEngine, Shader, TextureAtlas}
 import org.lwjgl.input.{Controller, Mouse}
-import org.lwjgl.openal.AL10
 import org.oc.ld32.entity.EntityPlayer
 import org.oc.ld32.gui.{GuiLevelCleared, GuiMainMenu, GuiScreen}
 import org.oc.ld32.input.gamepad.Controls
@@ -203,7 +202,7 @@ object Game extends GameBase("Baguettes") {
 
   override def onAxisMoved(value: Float, index: Int, source: Controller): Unit = {
     // TODO: Use for mappings
-  //  println(s"$value $index")
+    println(s"$value $index")
     if (currentGui != null) {
       currentGui.onAxisMoved(value, index)
     }

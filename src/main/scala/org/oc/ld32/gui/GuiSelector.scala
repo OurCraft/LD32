@@ -1,7 +1,6 @@
 package org.oc.ld32.gui
 
 import org.lengine.render.RenderEngine
-import org.lwjgl.input.Keyboard
 import org.oc.ld32.Game
 import org.oc.ld32.gui.action.ActionHandler
 import org.oc.ld32.input.gamepad.Controls
@@ -23,7 +22,6 @@ class GuiSelector(val options: java.util.ArrayList[String], x: Int, y: Int) exte
   }
 
   override def onKeyReleased(keyCode: Int, char: Char): Unit = {
-    println(s"$keyCode")
     if(keyCode == KeyControls.down) {
       selectedIndex += 1
       if (selectedIndex == options.size) selectedIndex = 0
@@ -56,7 +54,6 @@ class GuiSelector(val options: java.util.ArrayList[String], x: Int, y: Int) exte
     val threshold = 0.98f
     if(Math.abs(value) > threshold && RenderEngine.time - lastMoved > 1f/20f) {
       lastMoved = RenderEngine.time
-      println(s"$value $index")
       if(index == Controls.moveY) {
         if (value < 0f) {
           selectedIndex -= 1
