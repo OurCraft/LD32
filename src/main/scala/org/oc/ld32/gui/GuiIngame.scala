@@ -47,9 +47,13 @@ class GuiIngame extends GuiScreen {
       if (Game.isPaused) {
         this.fontRenderer.renderString("Pause", 800, 310, 0xFFFFFFFF, 2f)
       }
-      else if(Game.player.isDead())
-      {
-        this.fontRenderer.renderString("You are dead! Retry? [R]", 800, 600)
+      else if(Game.player.isDead()) {
+        if(guiEditor != null) {
+          val text = "You are dead! Go back to the editor: [R]"
+          this.fontRenderer.renderString(text, width-Game.fontRenderer.getWidth(text), 600)
+        } else {
+          this.fontRenderer.renderString("You are dead! Retry? [R]", 800, 600)
+        }
       }
 
     }
@@ -58,7 +62,13 @@ class GuiIngame extends GuiScreen {
 
     if(Game.player != null && Game.player.isDead() && keyCode == KeyControls.retry)
     {
-      Game.loadLevel(Game.level.getName(), true)
+      if(guiEditor != null) {
+        Game.level = null
+        Game.player = null
+        Game.displayGuiScreen(guiEditor)
+      } else {
+        Game.loadLevel(Game.level.getName(), true)
+      }
     }
     else if(!Game.isPaused && keyCode == KeyControls.pause)
     {
