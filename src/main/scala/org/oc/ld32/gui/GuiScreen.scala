@@ -21,12 +21,14 @@ abstract class GuiScreen extends BaguetteGui {
 
   override def onMousePressed(x: Int, y: Int, button: Int): Unit = {
     for (element <- elements) {
+      element.setCursorPos(x,y)
       element.onMousePressed(x,y,button)
     }
   }
 
   override def onMouseReleased(x: Int, y: Int, button: Int): Unit = {
     for (element <- elements) {
+      element.setCursorPos(x,y)
       element.onMouseReleased(x,y,button)
     }
   }
@@ -45,6 +47,7 @@ abstract class GuiScreen extends BaguetteGui {
 
   override def onMouseMove(x: Int, y: Int, dx: Int, dy: Int) = {
     for (element <- elements) {
+      element.setCursorPos(x,y)
       element.onMouseMove(x,y,dx,dy)
     }
   }
