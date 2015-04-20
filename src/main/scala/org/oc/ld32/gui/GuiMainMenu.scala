@@ -122,10 +122,8 @@ class GuiMainMenu extends GuiScreen with ActionHandler {
       } else if (id == 1) {
         // Todo: level selection
       } else if (id == 2) {
-        // Todo: editor
         Game.displayGuiScreen(new GuiEditor)
       } else if (id == 3) {
-        // Todo: options
         Game.displayGuiScreen(new GuiOptions)
       } else if (id == 4) {
         System.exit(0)

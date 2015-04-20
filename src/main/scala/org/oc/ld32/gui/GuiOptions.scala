@@ -1,17 +1,22 @@
 package org.oc.ld32.gui
 
-import org.oc.ld32.gui.action.ActionHandler
+import org.lengine.render.RenderEngine
+import org.oc.ld32.input.keyboard.KeyControls
 
-class GuiOptions extends GuiScreen with ActionHandler {
+class GuiOptions extends GuiScreen {
+  var buttonUp: GuiButton = _
+
   override def init(): Unit = {
-
+    buttonUp = new GuiButton("UP - " + KeyControls.up, 10, RenderEngine.displayHeight - 60)
+    buttonUp.setHandler(button => {
+      println("up")
+    })
+    elements.add(buttonUp)
   }
 
   override def renderScreen(delta: Float): Unit = {
+    buttonUp.render(delta)
 
-  }
-
-  override def onAction(source: Object, id: Int): Unit = {
-
+    fontRenderer.renderString("Press 'esc' to save and return to the main menu", 10, RenderEngine.displayHeight - 20)
   }
 }
