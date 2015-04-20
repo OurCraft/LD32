@@ -15,8 +15,8 @@ class GuiLevelCleared(parent: GuiScreen) extends GuiScreen {
   var trail: util.List[Sprite] = new util.ArrayList
   var unused: util.List[Sprite] = new util.ArrayList
 
-  private val minColor: Int = 0x7C7C7C
-  private val maxColor: Int = 0x0F0F0F
+  private val minColor: Int = 0x000000
+  private val maxColor: Int = 0xFFFFFF
 
   override def init(): Unit = {
     trail.clear()
