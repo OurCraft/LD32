@@ -4,14 +4,14 @@ import java.io._
 import java.util.{ArrayList, HashMap, List, Map, Stack}
 
 import com.google.gson.stream.JsonWriter
-import org.lengine.maths.Vec2f
-import org.lengine.render.{Sprite, TextureAtlas, TextureRegion}
+import org.lengine.maths.{Mat4f, Vec2f}
+import org.lengine.render.{RenderEngine, Sprite, TextureAtlas, TextureRegion}
 import org.lwjgl.input.Keyboard
 import org.oc.ld32.Game
 import org.oc.ld32.gui._
 import org.oc.ld32.input.gamepad.Controls
 import org.oc.ld32.level.{FloorDecoration, Wall}
-import org.oc.ld32.render.Animation
+import org.oc.ld32.render.{Camera, Animation}
 
 import scala.collection.JavaConversions._
 
@@ -56,6 +56,7 @@ class GuiEditor extends GuiScreen {
   var shouldRemoveWindow = false
   var rotation = 0f
   var spawnAngle = 0f
+  val camera: Camera = new Camera
   val actionStack: Stack[String] = new Stack
 
   val shadowSprite = new Sprite("assets/textures/gui/shadow.png")
@@ -90,21 +91,22 @@ class GuiEditor extends GuiScreen {
     if(Math.abs(xAmount) > threshold || Math.abs(yAmount) > threshold)
       cursor.set(cursor.x+xAmount*speed,cursor.y-yAmount*speed)
 
-    if(cursor.x < 0) {
-      cursor.x = 0
+    val screenPos = cursor - camera.pos
+    if(screenPos.x <= 16) {
+      camera.pos -= (delta*60f*64f,0)
     }
-    if(cursor.y < 0) {
-      cursor.y = 0
+    if(screenPos.y <= 16) {
+      camera.pos -= (0,delta*60f*64f)
     }
-    if(cursor.x > width) {
-      cursor.x = width
+    if(screenPos.x > width-16) {
+      camera.pos += (delta*60f*64f, 0)
     }
-    if(cursor.y > height) {
-      cursor.y = height
+    if(screenPos.y > height-16) {
+      camera.pos += (0,delta*60f*64f)
     }
 
     if(modalWindow != null) {
-      modalWindow.setCursorPos(cursor.x, cursor.y)
+      modalWindow.setCursorPos(screenPos.x, screenPos.y)
     }
 
     arrowSprite.setPos(cursor.x, cursor.y-arrowSprite.height/2f)
@@ -159,6 +161,7 @@ class GuiEditor extends GuiScreen {
       elements.remove(modalWindow)
       modalWindow = null
     }
+    camera.update()
     updateCursor(delta)
 
     for(floor <- floorDecorations) {
@@ -187,16 +190,18 @@ class GuiEditor extends GuiScreen {
       wall.render(delta)
     }
 
-    nortapSprite.setPos(0,height-nortapSprite.height)
-    floorSprite.setPos(64f,height-nortapSprite.height)
-    wallSprite.setPos(128f,height-nortapSprite.height)
-    baguetteSprite.setPos(128+64f,height-nortapSprite.height)
-    playerSprite.setPos(256f,height-nortapSprite.height)
-    testSprite.setPos(256f+64f,height-nortapSprite.height)
-    saveSprite.setPos(256f+128f,height-nortapSprite.height)
+    nortapSprite.setPos(0,height-nortapSprite.height-32f)
+    floorSprite.setPos(64f,height-nortapSprite.height-32f)
+    wallSprite.setPos(128f,height-nortapSprite.height-32f)
+    baguetteSprite.setPos(128+64f,height-nortapSprite.height-32f)
+    playerSprite.setPos(256f,height-nortapSprite.height-32f)
+    testSprite.setPos(256f+64f,height-nortapSprite.height-32f)
+    saveSprite.setPos(256f+128f,height-nortapSprite.height-32f)
 
     baguetteSprite.setAngle(0)
     playerSprite.setAngle(0)
+
+    RenderEngine.setTransformMatrix(new Mat4f().identity)
 
     wallSprite.render(delta)
     floorSprite.render(delta)
@@ -205,6 +210,8 @@ class GuiEditor extends GuiScreen {
     nortapSprite.render(delta)
     playerSprite.render(delta)
     baguetteSprite.render(delta)
+
+    camera.update()
     arrowSprite.render(delta)
 
     if(!dragging && modalWindow == null) {
@@ -216,26 +223,32 @@ class GuiEditor extends GuiScreen {
     }
 
     if(modalWindow != null) {
+      RenderEngine.setTransformMatrix(new Mat4f().identity)
+
       shadowSprite.render(delta)
       modalWindow.render(delta)
+
+      camera.update()
     }
     if(showCursor) {
       cursorSprite.setPos(cursor.x - cursorSprite.width/2f, cursor.y - cursorSprite.height/2f)
       cursorSprite.render(delta)
     }
+
+
   }
 
   override def onMousePressed(x: Int, y: Int, button: Int): Unit = {
     super.onMousePressed(x,y,button)
     showCursor = false
-    cursor.set(x,y)
+    cursor.set(x+camera.pos.x,y+camera.pos.y)
     onPressed
   }
 
   override def onMouseReleased(x: Int, y: Int, button: Int): Unit = {
     super.onMouseReleased(x,y,button)
     showCursor = false
-    cursor.set(x,y)
+    cursor.set(x+camera.pos.x,y+camera.pos.y)
     onReleased
   }
 
@@ -544,7 +557,8 @@ class GuiEditor extends GuiScreen {
   def onPressed: Unit = {
     if(modalWindow != null)
       return
-    if(cursor.y < height-64f) {
+    val screenPos = cursor - camera.pos
+    if(screenPos.y < height-64f-32f) {
       dragging = true
       startDragX = cursor.x
       startDragY = cursor.y
@@ -579,7 +593,7 @@ class GuiEditor extends GuiScreen {
         case _ =>
       }
     } else {
-      val index = (cursor.x/64f).toInt
+      val index = (screenPos.x/64f).toInt
       if(index < options.size) {
         currentObject = options(index)
 
@@ -622,7 +636,8 @@ class GuiEditor extends GuiScreen {
   def onReleased: Unit = {
     if(modalWindow != null)
       return
-    if(cursor.y < height-64f) {
+    val screenPos = cursor - camera.pos
+    if(screenPos.y < height-64f) {
       actionStack.push(currentObject)
     }
     dragging = false
@@ -635,7 +650,7 @@ class GuiEditor extends GuiScreen {
   override def onMouseMove(x: Int, y: Int, dx: Int, dy: Int) = {
     super.onMouseMove(x,y,dx,dy)
     showCursor = false
-    cursor.set(x,y)
+    cursor.set(x+camera.pos.x,y+camera.pos.y)
   }
 
   override def onAxisMoved(value: Float, index: Int) = {
