@@ -17,7 +17,10 @@ object LevelLoader {
       val value = baguetteData.get("value").getAsFloat
       val x = baguetteData.get("x").getAsFloat
       val y = baguetteData.get("y").getAsFloat
-      level.addBaguette(value, x, y)
+
+      val baguette = level.addBaguette(value, x, y)
+      if(baguetteData.has("angle"))
+        baguette.setAngle(baguetteData.get("angle").getAsFloat)
     }
   }
 
@@ -71,6 +74,8 @@ object LevelLoader {
       val aiType = enemyObject.get("ai").getAsString
       val enemy = new EntityEnemy(id)
       enemy.setPos(new Vec2f(x, y))
+      if(enemyObject.has("angle"))
+        enemy.setAngle(enemyObject.get("angle").getAsFloat)
       val task = Tasks.createFromID(enemy, aiType)
       enemy.aiList.add(task)
 

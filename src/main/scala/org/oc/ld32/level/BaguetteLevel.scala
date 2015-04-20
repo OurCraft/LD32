@@ -14,10 +14,11 @@ class BaguetteLevel(name: String) extends Level {
 
   var spawnpoint: Vec2f = _
 
-  def addBaguette(value: Float, x: Float, y: Float): Unit = {
+  def addBaguette(value: Float, x: Float, y: Float): EntityBaguettePiece = {
     val baguettePiece: EntityBaguettePiece = new EntityBaguettePiece(value)
     baguettePiece.setPos(new Vec2f(x,y))
     spawn(baguettePiece)
+    baguettePiece
   }
 
   val walls: List[Wall] = new ArrayList[Wall]

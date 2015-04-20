@@ -43,6 +43,9 @@ class GuiEditor extends GuiScreen {
   val saveSprite = new Sprite("assets/textures/gui/editorSave.png")
   val baguetteSprite = new Sprite("assets/textures/entities/baguette.png")
   val cursorSprite = new Sprite("assets/textures/gui/editorCursor.png")
+  val arrowSprite = new Sprite("assets/textures/gui/editorArrow.png")
+  arrowSprite.setCenter(new Vec2f(0, arrowSprite.height/2f))
+
   var showCursor = false
   var dragging = false
   var startDragX = 0f
@@ -50,6 +53,7 @@ class GuiEditor extends GuiScreen {
   var modalWindow: ModalWindow = null
   val cursor: Vec2f = new Vec2f
   var shouldRemoveWindow = false
+  var rotation = 0f
   val actionStack: Stack[String] = new Stack
 
   val shadowSprite = new Sprite("assets/textures/gui/shadow.png")
@@ -99,6 +103,9 @@ class GuiEditor extends GuiScreen {
     if(modalWindow != null) {
       modalWindow.setCursorPos(cursor.x, cursor.y)
     }
+
+    arrowSprite.setPos(cursor.x, cursor.y-arrowSprite.height/2f)
+    arrowSprite.setAngle(rotation)
 
     if(dragging && modalWindow == null) {
       currentObject match {
@@ -157,6 +164,7 @@ class GuiEditor extends GuiScreen {
 
     for(baguette <- baguettes) {
       baguetteSprite.setPos(baguette.x, baguette.y)
+      baguetteSprite.setAngle(baguette.angle)
       baguetteSprite.render(delta)
     }
 
@@ -164,7 +172,7 @@ class GuiEditor extends GuiScreen {
       val anim: Animation = getAnim(enemy.id)
       anim.update(delta)
       anim.transform.pos.set(enemy.x, enemy.y)
-      anim.transform.angle = -(Math.PI/2f).toFloat
+      anim.transform.angle = -(Math.PI/2f).toFloat + enemy.angle
       anim.render(delta)
     }
 
@@ -179,12 +187,15 @@ class GuiEditor extends GuiScreen {
     testSprite.setPos(256f,height-nortapSprite.height)
     saveSprite.setPos(256f+64f,height-nortapSprite.height)
 
+    baguetteSprite.setAngle(0)
+
     wallSprite.render(delta)
     floorSprite.render(delta)
     saveSprite.render(delta)
     testSprite.render(delta)
     nortapSprite.render(delta)
     baguetteSprite.render(delta)
+    arrowSprite.render(delta)
 
     if(!dragging && modalWindow == null) {
       var text = currentObject
@@ -247,6 +258,9 @@ class GuiEditor extends GuiScreen {
     super.onKeyReleased(keyCode, char)
     if(keyCode == Keyboard.KEY_Z && Game.isKeyPressed(Keyboard.KEY_LCONTROL)) {
       rollBack
+    } else if(keyCode == Keyboard.KEY_R) {
+      rotation += (Math.PI/2f).toFloat
+      rotation %= (Math.PI*2f).toFloat
     }
   }
 
@@ -383,6 +397,9 @@ class GuiEditor extends GuiScreen {
       writer.name("y")
       writer.value(enemy.y)
 
+      writer.name("angle")
+      writer.value(enemy.angle)
+
       writer.endObject()
     }
     writer.endArray()
@@ -452,6 +469,9 @@ class GuiEditor extends GuiScreen {
 
       writer.name("y")
       writer.value(baguette.y)
+
+      writer.name("angle")
+      writer.value(baguette.angle)
 
       writer.endObject()
     }
@@ -529,12 +549,12 @@ class GuiEditor extends GuiScreen {
         case ENEMY => {
           val id = extraData.split(";")(0)
           val aiType = extraData.split(";")(1)
-          val enemy = new EnemyDef(id, aiType, cursor.x, cursor.y)
+          val enemy = new EnemyDef(id, aiType, cursor.x-32f, cursor.y-32f, rotation)
           enemyDefinitions.add(enemy)
         }
 
         case BAGUETTE => {
-          baguettes.add(new BaguetteDef(java.lang.Float.parseFloat(extraData), cursor.x, cursor.y))
+          baguettes.add(new BaguetteDef(java.lang.Float.parseFloat(extraData), cursor.x-32f, cursor.y-32f, rotation))
         }
 
         case _ =>
@@ -617,6 +637,9 @@ class GuiEditor extends GuiScreen {
       onReleased
     } else if(button == Controls.throwButton) {
       rollBack
+    } else if(button == Controls.attack) {
+      rotation += (Math.PI/2f).toFloat
+      rotation %= (Math.PI*2f).toFloat
     }
   }
 }
