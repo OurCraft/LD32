@@ -1,0 +1,76 @@
+{
+    "spawnpoint": [
+        188.0,
+        324.0
+    ],
+    "spawnangle": 0.0,
+    "music": "Night Shift - Möbius",
+    "enemies": [],
+    "floor": [
+        {
+            "texture": "carpet",
+            "x": 128.0,
+            "y": 144.0,
+            "width": 912.0,
+            "height": 272.0
+        }
+    ],
+    "walls": [
+        {
+            "id": "",
+            "x": 112.0,
+            "y": 416.0,
+            "vertical": false,
+            "length": 928.0
+        },
+        {
+            "id": "",
+            "x": 112.0,
+            "y": 128.0,
+            "vertical": true,
+            "length": 304.0
+        },
+        {
+            "id": "",
+            "x": 112.0,
+            "y": 128.0,
+            "vertical": false,
+            "length": 928.0
+        },
+        {
+            "id": "",
+            "x": 1040.0,
+            "y": 128.0,
+            "vertical": true,
+            "length": 304.0
+        }
+    ],
+    "baguettes": [
+        {
+            "value": 0.25,
+            "x": 266.0,
+            "y": 284.0,
+            "angle": 0.0
+        },
+        {
+            "value": 0.25,
+            "x": 502.0,
+            "y": 286.0,
+            "angle": 0.0
+        },
+        {
+            "value": 0.25,
+            "x": 685.0,
+            "y": 291.0,
+            "angle": 0.0
+        },
+        {
+            "value": 0.25,
+            "x": 907.0,
+            "y": 290.0,
+            "angle": 0.0
+        }
+    ],
+
+    "followingLevel": "lvl1"
+}

@@ -6,7 +6,7 @@ import org.lengine.render.{FontRenderer, RenderEngine, Shader, TextureAtlas}
 import org.lwjgl.input.{Controller, Mouse}
 import org.lwjgl.openal.AL10
 import org.oc.ld32.entity.EntityPlayer
-import org.oc.ld32.gui.{GuiMainMenu, GuiScreen}
+import org.oc.ld32.gui.{GuiLevelCleared, GuiMainMenu, GuiScreen}
 import org.oc.ld32.input.gamepad.Controls
 import org.oc.ld32.input.keyboard.KeyControls
 import org.oc.ld32.level.{BaguetteLevel, LevelLoader}

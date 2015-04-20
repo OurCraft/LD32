@@ -1,0 +1,110 @@
+{
+    "spawnpoint": [
+        0.0,
+        0.0
+    ],
+    "spawnangle": 0.0,
+    "music": "Night Shift - Möbius",
+    "enemies": [
+        {
+            "id": "nortap",
+            "ai": "wander",
+            "x": 550.0,
+            "y": 32.0,
+            "angle": 0.0
+        },
+        {
+            "id": "nortap",
+            "ai": "patrol",
+            "x": 552.0,
+            "y": 408.0,
+            "angle": 1.5707963705062866
+        }
+    ],
+    "floor": [
+        {
+            "texture": "planks",
+            "x": -80.0,
+            "y": -96.0,
+            "width": 1296.0,
+            "height": 608.0
+        }
+    ],
+    "walls": [
+        {
+            "id": "",
+            "x": 48.0,
+            "y": 512.0,
+            "vertical": false,
+            "length": 1168.0
+        },
+        {
+            "id": "",
+            "x": 1216.0,
+            "y": -144.0,
+            "vertical": true,
+            "length": 656.0
+        },
+        {
+            "id": "",
+            "x": -128.0,
+            "y": -128.0,
+            "vertical": false,
+            "length": 1344.0
+        },
+        {
+            "id": "",
+            "x": -112.0,
+            "y": -112.0,
+            "vertical": true,
+            "length": 640.0
+        },
+        {
+            "id": "",
+            "x": -112.0,
+            "y": 512.0,
+            "vertical": false,
+            "length": 192.0
+        },
+        {
+            "id": "",
+            "x": 512.0,
+            "y": -112.0,
+            "vertical": true,
+            "length": 272.0
+        },
+        {
+            "id": "",
+            "x": 512.0,
+            "y": 400.0,
+            "vertical": true,
+            "length": 128.0
+        }
+    ],
+    "baguettes": [
+        {
+            "value": 0.25,
+            "x": 548.0,
+            "y": 102.0,
+            "angle": 0.0
+        },
+        {
+            "value": 0.25,
+            "x": 544.0,
+            "y": 437.0,
+            "angle": 0.0
+        },
+        {
+            "value": 0.25,
+            "x": 813.0,
+            "y": 164.0,
+            "angle": 0.0
+        },
+        {
+            "value": 0.25,
+            "x": 808.0,
+            "y": 290.0,
+            "angle": 0.0
+        }
+    ]
+}

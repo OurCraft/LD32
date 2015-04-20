@@ -123,6 +123,10 @@ object LevelLoader {
       val enemiesData = levelData.get("enemies").getAsJsonArray
       handleEnemies(level, enemiesData)
     }
+
+    if(levelData.has("followingLevel")) {
+      level.nextID = levelData.get("followingLevel").getAsString
+    }
     level
   }
 }

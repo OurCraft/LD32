@@ -1,0 +1,84 @@
+{
+    "spawnpoint": [
+        244.0,
+        292.0
+    ],
+    "spawnangle": 0.0,
+    "music": "Night Shift - Möbius",
+    "enemies": [
+        {
+            "id": "nortap",
+            "ai": "patrol",
+            "x": 684.0,
+            "y": 259.0,
+            "angle": 0.0
+        }
+    ],
+    "floor": [
+        {
+            "texture": "planks",
+            "x": 128.0,
+            "y": 128.0,
+            "width": 688.0,
+            "height": 304.0
+        }
+    ],
+    "walls": [
+        {
+            "id": "",
+            "x": 112.0,
+            "y": 112.0,
+            "vertical": false,
+            "length": 704.0
+        },
+        {
+            "id": "",
+            "x": 816.0,
+            "y": 128.0,
+            "vertical": true,
+            "length": 304.0
+        },
+        {
+            "id": "",
+            "x": 128.0,
+            "y": 432.0,
+            "vertical": false,
+            "length": 688.0
+        },
+        {
+            "id": "",
+            "x": 112.0,
+            "y": 112.0,
+            "vertical": true,
+            "length": 336.0
+        }
+    ],
+    "baguettes": [
+        {
+            "value": 0.25,
+            "x": 212.0,
+            "y": 281.0,
+            "angle": 0.0
+        },
+        {
+            "value": 0.25,
+            "x": 208.0,
+            "y": 244.0,
+            "angle": 0.0
+        },
+        {
+            "value": 0.25,
+            "x": 208.0,
+            "y": 257.0,
+            "angle": 0.0
+        },
+        {
+            "value": 0.25,
+            "x": 212.0,
+            "y": 274.0,
+            "angle": 0.0
+        }
+    ],
+
+    "followingLevel": "lvl2"
+}

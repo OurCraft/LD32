@@ -1,0 +1,91 @@
+{
+    "spawnpoint": [
+        164.0,
+        35.0
+    ],
+    "spawnangle": 0.0,
+    "music": "Night Shift - Möbius",
+    "enemies": [
+        {
+            "id": "nortap",
+            "ai": "wander",
+            "x": 655.0,
+            "y": 190.0,
+            "angle": 0.0
+        },
+        {
+            "id": "nortap",
+            "ai": "wander",
+            "x": 650.0,
+            "y": 11.0,
+            "angle": 0.0
+        }
+    ],
+    "floor": [
+        {
+            "texture": "tiles",
+            "x": 80.0,
+            "y": -64.0,
+            "width": 976.0,
+            "height": 480.0
+        }
+    ],
+    "walls": [
+        {
+            "id": "",
+            "x": 64.0,
+            "y": 416.0,
+            "vertical": false,
+            "length": 976.0
+        },
+        {
+            "id": "",
+            "x": 1056.0,
+            "y": -96.0,
+            "vertical": true,
+            "length": 528.0
+        },
+        {
+            "id": "",
+            "x": 96.0,
+            "y": -96.0,
+            "vertical": false,
+            "length": 960.0
+        },
+        {
+            "id": "",
+            "x": 64.0,
+            "y": -96.0,
+            "vertical": true,
+            "length": 512.0
+        }
+    ],
+    "baguettes": [
+        {
+            "value": 0.25,
+            "x": 202.0,
+            "y": -10.0,
+            "angle": 0.0
+        },
+        {
+            "value": 0.25,
+            "x": 204.0,
+            "y": 87.0,
+            "angle": 0.0
+        },
+        {
+            "value": 0.25,
+            "x": 938.0,
+            "y": -7.0,
+            "angle": 0.0
+        },
+        {
+            "value": 0.25,
+            "x": 932.0,
+            "y": 128.0,
+            "angle": 0.0
+        }
+    ],
+
+    "followingLevel": "lvl3"
+}

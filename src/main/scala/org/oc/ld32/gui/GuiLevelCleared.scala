@@ -1,10 +1,10 @@
-package org.oc.ld32
+package org.oc.ld32.gui
 
 import java.util
 
 import org.lengine.maths.Quaternion
 import org.lengine.render.{RenderEngine, Sprite}
-import org.oc.ld32.gui.{GuiMainMenu, GuiIngame, GuiScreen}
+import org.oc.ld32.Game
 
 class GuiLevelCleared(parent: GuiScreen) extends GuiScreen {
 
@@ -97,16 +97,17 @@ class GuiLevelCleared(parent: GuiScreen) extends GuiScreen {
             Game.displayGuiScreen(new GuiMainMenu)
             Game.stopAllSounds()
             Game.playMusic("LD32 - Third Track - Abstraction")
+            Game.level = null
           }
         }
 
         case _ => {
           println(s"$parent")
           Game.displayGuiScreen(parent)
+          Game.level = null
         }
       }
     }
-    Game.level = null
     Game.isPaused = false
   }
 

@@ -118,7 +118,7 @@ class GuiMainMenu extends GuiScreen with ActionHandler {
     if (source == selector) {
       if (id == 0) {
         Game.displayGuiScreen(new GuiIngame)
-        Game.loadLevel("testLevel0", true)
+        Game.loadLevel("lvl0", true)
       } else if (id == 1) {
         // Todo: level selection
       } else if (id == 2) {
