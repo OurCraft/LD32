@@ -1,12 +1,14 @@
 apply plugin: 'scala'
 apply plugin: 'java'
+apply plugin: 'application'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 1.6
 
 
 // Maven Artefacts Info
 group = "org.oc.ld32"
 archivesBaseName = 'LD32'
+mainClassName = 'org.oc.ld32.Game'
 
 apply plugin: 'eclipse'
 apply plugin: 'idea'
@@ -36,6 +38,16 @@ compileScala.options.encoding = 'UTF-8'
 
 tasks.withType(ScalaCompile) {
     scalaCompileOptions.useAnt = false
+}
+
+
+jar {
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    include '**'
+
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
 }
 
 dependencies {
