@@ -1,6 +1,7 @@
 package org.oc.ld32.entity
 
 import org.lengine.render.{Texture, TextureAtlas}
+import org.oc.ld32.Game
 import org.oc.ld32.render.Animation
 
 class EntityPlayer extends EntityBiped("player", 30f) {
@@ -30,6 +31,13 @@ class EntityPlayer extends EntityBiped("player", 30f) {
       attackRange*multiplier + (baguetteCompletion * attackRange/multiplier)
     else
       attackRange*multiplier
+  }
+
+
+  override def die(): Unit =
+  {
+    Game.playSound("die.ogg")
+    super.die()
   }
 
 }

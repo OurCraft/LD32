@@ -10,6 +10,8 @@ class EntityEnemy(id: String) extends EntityBiped(id) {
   val aiList: List[AITask] = new ArrayList[AITask]
 
   def updateAITasks(delta: Float): Unit = {
+    if(isDead())
+      return
     for(i <- 0 until aiList.size) {
       val task: AITask = aiList.get(i)
       if(task.running) {
