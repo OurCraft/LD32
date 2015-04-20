@@ -1,0 +1,470 @@
+{
+    "spawnpoint": [
+        -446.0,
+        201.0
+    ],
+    "spawnangle": 0.0,
+    "music": "Hanging On - BlitzEcho",
+    "enemies": [
+        {
+            "id": "nortap",
+            "ai": "wander",
+            "x": 20.0,
+            "y": 378.0,
+            "angle": 0.0
+        },
+        {
+            "id": "nortap",
+            "ai": "wander",
+            "x": 219.0,
+            "y": 413.0,
+            "angle": 4.71238899230957
+        },
+        {
+            "id": "nortap",
+            "ai": "patrol",
+            "x": 685.0,
+            "y": 389.0,
+            "angle": 0.0
+        },
+        {
+            "id": "nortap",
+            "ai": "patrol",
+            "x": 905.0,
+            "y": 390.0,
+            "angle": 3.1415927410125732
+        },
+        {
+            "id": "nortap",
+            "ai": "patrol",
+            "x": 687.0,
+            "y": -21.0,
+            "angle": 1.5707963705062866
+        },
+        {
+            "id": "nortap",
+            "ai": "patrol",
+            "x": 914.0,
+            "y": 192.0,
+            "angle": 4.71238899230957
+        },
+        {
+            "id": "nortap",
+            "ai": "patrol",
+            "x": 683.0,
+            "y": 196.0,
+            "angle": 0.0
+        },
+        {
+            "id": "nortap",
+            "ai": "patrol",
+            "x": 917.0,
+            "y": -23.0,
+            "angle": 3.1415927410125732
+        },
+        {
+            "id": "nortap",
+            "ai": "patrol",
+            "x": 353.0,
+            "y": 393.0,
+            "angle": 4.71238899230957
+        },
+        {
+            "id": "nortap",
+            "ai": "patrol",
+            "x": 582.0,
+            "y": 387.0,
+            "angle": 3.1415927410125732
+        },
+        {
+            "id": "nortap",
+            "ai": "wander",
+            "x": 219.0,
+            "y": 77.0,
+            "angle": 3.1415927410125732
+        },
+        {
+            "id": "nortap",
+            "ai": "wander",
+            "x": 36.0,
+            "y": -17.0,
+            "angle": 0.0
+        },
+        {
+            "id": "nortap",
+            "ai": "wander",
+            "x": 518.0,
+            "y": -17.0,
+            "angle": 3.1415927410125732
+        }
+    ],
+    "floor": [
+        {
+            "texture": "planks",
+            "x": 32.0,
+            "y": -16.0,
+            "width": 944.0,
+            "height": 480.0
+        },
+        {
+            "texture": "tiles",
+            "x": -224.0,
+            "y": 176.0,
+            "width": 256.0,
+            "height": 64.0
+        },
+        {
+            "texture": "dirt",
+            "x": -528.0,
+            "y": 80.0,
+            "width": 288.0,
+            "height": 272.0
+        },
+        {
+            "texture": "dirt",
+            "x": -240.0,
+            "y": 80.0,
+            "width": 16.0,
+            "height": 272.0
+        },
+        {
+            "texture": "dirt",
+            "x": -272.0,
+            "y": 0.0,
+            "width": 32.0,
+            "height": 64.0
+        },
+        {
+            "texture": "planks",
+            "x": -512.0,
+            "y": 240.0,
+            "width": 112.0,
+            "height": 96.0
+        },
+        {
+            "texture": "planks",
+            "x": -512.0,
+            "y": 320.0,
+            "width": 0.0,
+            "height": 0.0
+        },
+        {
+            "texture": "planks",
+            "x": -512.0,
+            "y": 80.0,
+            "width": 288.0,
+            "height": 256.0
+        },
+        {
+            "texture": "planks",
+            "x": -528.0,
+            "y": 80.0,
+            "width": 304.0,
+            "height": 272.0
+        },
+        {
+            "texture": "planks",
+            "x": -512.0,
+            "y": 32.0,
+            "width": 96.0,
+            "height": 32.0
+        },
+        {
+            "texture": "planks",
+            "x": -512.0,
+            "y": 48.0,
+            "width": 64.0,
+            "height": 32.0
+        },
+        {
+            "texture": "planks",
+            "x": -512.0,
+            "y": 48.0,
+            "width": 48.0,
+            "height": 48.0
+        },
+        {
+            "texture": "planks",
+            "x": -512.0,
+            "y": 64.0,
+            "width": 16.0,
+            "height": 32.0
+        },
+        {
+            "texture": "planks",
+            "x": -528.0,
+            "y": 32.0,
+            "width": 304.0,
+            "height": 48.0
+        },
+        {
+            "texture": "carpet",
+            "x": -336.0,
+            "y": 528.0,
+            "width": 0.0,
+            "height": 0.0
+        },
+        {
+            "texture": "carpet",
+            "x": 16.0,
+            "y": 272.0,
+            "width": 0.0,
+            "height": 160.0
+        },
+        {
+            "texture": "carpet",
+            "x": 688.0,
+            "y": -32.0,
+            "width": 288.0,
+            "height": 496.0
+        }
+    ],
+    "walls": [
+        {
+            "id": "",
+            "x": -48.0,
+            "y": 240.0,
+            "vertical": false,
+            "length": 0.0
+        },
+        {
+            "id": "",
+            "x": -48.0,
+            "y": 144.0,
+            "vertical": false,
+            "length": 0.0
+        },
+        {
+            "id": "",
+            "x": -208.0,
+            "y": 144.0,
+            "vertical": false,
+            "length": 128.0
+        },
+        {
+            "id": "",
+            "x": 0.0,
+            "y": 144.0,
+            "vertical": false,
+            "length": 0.0
+        },
+        {
+            "id": "",
+            "x": 0.0,
+            "y": 144.0,
+            "vertical": false,
+            "length": 0.0
+        },
+        {
+            "id": "",
+            "x": -224.0,
+            "y": 144.0,
+            "vertical": false,
+            "length": 224.0
+        },
+        {
+            "id": "",
+            "x": -208.0,
+            "y": 240.0,
+            "vertical": false,
+            "length": 208.0
+        },
+        {
+            "id": "",
+            "x": -224.0,
+            "y": 240.0,
+            "vertical": false,
+            "length": 64.0
+        },
+        {
+            "id": "",
+            "x": -224.0,
+            "y": 272.0,
+            "vertical": true,
+            "length": 64.0
+        },
+        {
+            "id": "",
+            "x": -528.0,
+            "y": 352.0,
+            "vertical": false,
+            "length": 304.0
+        },
+        {
+            "id": "",
+            "x": -560.0,
+            "y": 0.0,
+            "vertical": true,
+            "length": 368.0
+        },
+        {
+            "id": "",
+            "x": -224.0,
+            "y": 0.0,
+            "vertical": true,
+            "length": 128.0
+        },
+        {
+            "id": "",
+            "x": -528.0,
+            "y": 0.0,
+            "vertical": false,
+            "length": 304.0
+        },
+        {
+            "id": "",
+            "x": 0.0,
+            "y": 272.0,
+            "vertical": true,
+            "length": 176.0
+        },
+        {
+            "id": "",
+            "x": 0.0,
+            "y": 464.0,
+            "vertical": false,
+            "length": 976.0
+        },
+        {
+            "id": "",
+            "x": 976.0,
+            "y": -16.0,
+            "vertical": true,
+            "length": 464.0
+        },
+        {
+            "id": "",
+            "x": 0.0,
+            "y": -48.0,
+            "vertical": false,
+            "length": 976.0
+        },
+        {
+            "id": "",
+            "x": 0.0,
+            "y": -16.0,
+            "vertical": true,
+            "length": 144.0
+        },
+        {
+            "id": "",
+            "x": 32.0,
+            "y": 336.0,
+            "vertical": false,
+            "length": 128.0
+        },
+        {
+            "id": "",
+            "x": 160.0,
+            "y": 336.0,
+            "vertical": false,
+            "length": 32.0
+        },
+        {
+            "id": "",
+            "x": 320.0,
+            "y": 336.0,
+            "vertical": true,
+            "length": 112.0
+        },
+        {
+            "id": "",
+            "x": 304.0,
+            "y": 336.0,
+            "vertical": false,
+            "length": 16.0
+        },
+        {
+            "id": "",
+            "x": 656.0,
+            "y": 368.0,
+            "vertical": true,
+            "length": 80.0
+        },
+        {
+            "id": "",
+            "x": 656.0,
+            "y": -16.0,
+            "vertical": true,
+            "length": 80.0
+        },
+        {
+            "id": "",
+            "x": 416.0,
+            "y": 48.0,
+            "vertical": false,
+            "length": 208.0
+        },
+        {
+            "id": "",
+            "x": 32.0,
+            "y": 48.0,
+            "vertical": false,
+            "length": 272.0
+        },
+        {
+            "id": "",
+            "x": 304.0,
+            "y": 48.0,
+            "vertical": true,
+            "length": 112.0
+        },
+        {
+            "id": "",
+            "x": 112.0,
+            "y": 144.0,
+            "vertical": false,
+            "length": 192.0
+        }
+    ],
+    "baguettes": [
+        {
+            "value": 0.25,
+            "x": 54.0,
+            "y": 174.0,
+            "angle": 1.5707963705062866
+        },
+        {
+            "value": 0.25,
+            "x": 159.0,
+            "y": 77.0,
+            "angle": 3.1415927410125732
+        },
+        {
+            "value": 0.25,
+            "x": 108.0,
+            "y": -22.0,
+            "angle": 0.0
+        },
+        {
+            "value": 0.25,
+            "x": 434.0,
+            "y": -20.0,
+            "angle": 3.1415927410125732
+        },
+        {
+            "value": 0.25,
+            "x": 790.0,
+            "y": -14.0,
+            "angle": 4.71238899230957
+        },
+        {
+            "value": 0.25,
+            "x": 797.0,
+            "y": 381.0,
+            "angle": 1.5707963705062866
+        },
+        {
+            "value": 0.25,
+            "x": 456.0,
+            "y": 382.0,
+            "angle": 1.5707963705062866
+        },
+        {
+            "value": 0.25,
+            "x": -369.0,
+            "y": 262.0,
+            "angle": 1.5707963705062866
+        }
+    ]
+}

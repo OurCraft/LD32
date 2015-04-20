@@ -2,6 +2,7 @@ package org.oc.ld32.entity
 
 import org.lengine.maths.Vec2f
 import org.lengine.render.{Texture, Sprite}
+import org.oc.ld32.Game
 
 class EntityAttack(owner: EntityBiped, x: Float, y: Float, w: Float, h: Float) extends BaguetteEntity {
 
@@ -39,6 +40,7 @@ class EntityAttack(owner: EntityBiped, x: Float, y: Float, w: Float, h: Float) e
     if (other != owner) {
       other match {
         case biped: EntityBiped => {
+          Game.playSound("hit.wav")
           biped.die()
           level despawn this
         }

@@ -15,6 +15,7 @@ import scala.collection.JavaConversions._
 
 object Game extends GameBase("Baguettes") {
 
+
   var level: BaguetteLevel = _
   var fontRenderer: FontRenderer = _
   var player: EntityPlayer = _
@@ -94,16 +95,20 @@ object Game extends GameBase("Baguettes") {
     camera = new Camera
   }
 
-  def playMusic(id: String): Unit = {
-    val sourceID = s"musics/$id.ogg"
-    val url = ClassLoader.getSystemResource("assets/sounds/" + sourceID)
+  def playMusic(id: String): Unit = this.playSound(s"musics/$id.ogg", true)
+
+  def playSound(id: String, loop: Boolean = false): Unit = {
+    val url = ClassLoader.getSystemResource("assets/sounds/" + id)
     soundManager.stop("music")
-  //  soundManager.play(url, "music", loop = true)
-    currentMusic = sourceID
+    soundManager.play(url, "music", loop)
+    currentMusic = id
     lastMusicCheck = RenderEngine.time
   }
 
   def loadLevel(id: String, reloadMusic: Boolean = false): Unit = {
+    var oldMusic = ""
+    if(level != null)
+      oldMusic = level.music
     level = LevelLoader.load(id)
     isPaused = false
     player = new EntityPlayer
@@ -111,7 +116,7 @@ object Game extends GameBase("Baguettes") {
 
     player setPos level.spawnpoint
 
-    if(reloadMusic && level.music != null) {
+    if(reloadMusic && level.music != null && oldMusic != level.music) {
       stopAllSounds()
       playMusic(level.music)
     }
