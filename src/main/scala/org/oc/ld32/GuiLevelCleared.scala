@@ -4,7 +4,7 @@ import java.util
 
 import org.lengine.maths.Quaternion
 import org.lengine.render.{RenderEngine, Sprite}
-import org.oc.ld32.gui.GuiScreen
+import org.oc.ld32.gui.{GuiMainMenu, GuiIngame, GuiScreen}
 
 class GuiLevelCleared(parent: GuiScreen) extends GuiScreen {
 
@@ -16,7 +16,7 @@ class GuiLevelCleared(parent: GuiScreen) extends GuiScreen {
   var unused: util.List[Sprite] = new util.ArrayList
 
   private val minColor: Int = 0x000000
-  private val maxColor: Int = 0xFFFFFF
+  private val maxColor: Int = 0xF8F8F8
 
   override def init(): Unit = {
     trail.clear()
@@ -32,7 +32,7 @@ class GuiLevelCleared(parent: GuiScreen) extends GuiScreen {
     val copy = new Sprite(sprite.texture, sprite.region, colorObject)
     val offsetX = Math.cos(RenderEngine.time).toFloat
     val offsetY = Math.sin(RenderEngine.time).toFloat
-    copy.setPos(sprite.getPos.x+offsetX, sprite.getPos.y + offsetY)
+    copy.setPos(sprite.getPos().x+offsetX, sprite.getPos().y + offsetY)
     copy
   }
 
@@ -41,7 +41,7 @@ class GuiLevelCleared(parent: GuiScreen) extends GuiScreen {
   }
 
   def drawTrail(original: Sprite, delta: Float) = {
-    if(RenderEngine.time - lastTimeAdded >= 1f/30f) {
+    if(RenderEngine.time - lastTimeAdded >= 1f/60f) {
       lastTimeAdded = RenderEngine.time
       if (unused.isEmpty)
         trail.add(createTrailPart(original))
@@ -50,15 +50,15 @@ class GuiLevelCleared(parent: GuiScreen) extends GuiScreen {
 
         val offsetX = Math.cos(RenderEngine.time).toFloat
         val offsetY = Math.sin(RenderEngine.time).toFloat
-        popped.setPos(original.getPos.x+offsetX, original.getPos.y + offsetY)
+        popped.setPos(original.getPos().x+offsetX, original.getPos().y + offsetY)
         trail.add(popped)
       }
     }
     for(i <- 0 until trail.size) {
       val trailPart = trail.get(i)
       val dir = (trailPart.getPos() - original.getPos()).norm()
-      trailPart.setPos(trailPart.getPos.x+dir.x*delta*60f, trailPart.getPos.y+dir.y*delta*60f)
-      if(outside(trailPart)) {
+      trailPart.setPos(trailPart.getPos().x+dir.x*delta*60f, trailPart.getPos().y+dir.y*delta*60f)
+      if(outside(trailPart) || ~(trailPart.getPos() - original.getPos()) >= 25f) {
         if(trailPart.texture == original.texture)
           unused.add(trailPart)
       } else {
@@ -74,5 +74,54 @@ class GuiLevelCleared(parent: GuiScreen) extends GuiScreen {
     drawTrail(titleSprite,delta)
 
     titleSprite.render(delta)
+
+    var text = "Press any key or button to go to the next level"
+    if(Game.level.nextID == null) {
+      text = "Press any key or button to go back to the previous menu"
+    }
+    val textX = width/2f-Game.fontRenderer.getWidth(text)/2f
+    val textY = height/2f-8f
+    Game.fontRenderer.renderString(text, textX, textY)
+  }
+
+  def next(): Unit = {
+    if(Game.level.nextID != null) {
+      Game.loadLevel(Game.level.nextID, reloadMusic = true)
+      Game.displayGuiScreen(parent)
+    } else {
+      parent match {
+        case ingameMenu: GuiIngame => {
+          if (ingameMenu.guiEditor != null) {
+            Game.displayGuiScreen(ingameMenu.guiEditor)
+          } else {
+            Game.displayGuiScreen(new GuiMainMenu)
+            Game.stopAllSounds()
+            Game.playMusic("LD32 - Third Track - Abstraction")
+          }
+        }
+
+        case _ => {
+          println(s"$parent")
+          Game.displayGuiScreen(parent)
+        }
+      }
+    }
+    Game.level = null
+    Game.isPaused = false
+  }
+
+  override def onKeyPressed(keycode: Int, char: Char): Unit = {
+    super.onKeyPressed(keycode, char)
+    next()
+  }
+
+  override def onMousePressed(x: Int, y: Int, button: Int): Unit = {
+    super.onMousePressed(x,y,button)
+    next()
+  }
+
+  override def onButtonPressed(button: Int): Unit = {
+    super.onButtonReleased(button)
+    next()
   }
 }

@@ -4,6 +4,7 @@ import org.lengine.GameBase
 import org.lengine.maths.Vec2f
 import org.lengine.render.{FontRenderer, RenderEngine, Shader, TextureAtlas}
 import org.lwjgl.input.{Controller, Mouse}
+import org.lwjgl.openal.AL10
 import org.oc.ld32.entity.EntityPlayer
 import org.oc.ld32.gui.{GuiMainMenu, GuiScreen}
 import org.oc.ld32.input.gamepad.Controls
@@ -20,10 +21,19 @@ object Game extends GameBase("Baguettes") {
   var currentGui: GuiScreen = _
   var usingGamepad = false
   var isPaused = false
+  var currentMusic: String = null
+  var lastMusicCheck = 0f
 
   override def getBaseHeight: Int = 640
 
   override def update(delta: Float): Unit = {
+    if(RenderEngine.time - lastMusicCheck >= 1f/20f) {
+      lastMusicCheck = RenderEngine.time
+      if (currentMusic != null && !soundManager.activeSounds.containsKey(s"musics/$currentMusic.ogg")) {
+        println("relaunching")
+        playMusic(currentMusic)
+      }
+    }
     if (level != null && !isPaused) {
       level.update(delta)
 
@@ -80,19 +90,37 @@ object Game extends GameBase("Baguettes") {
 
     fontRenderer = new FontRenderer(new TextureAtlas("assets/textures/font.png", 16, 16))
 
+    playMusic("LD32 - Third Track - Abstraction")
+
     if (currentGui != null) currentGui.init()
     displayGuiScreen(new GuiMainMenu)
   }
 
+  def playMusic(id: String): Unit = {
+    soundManager.play(s"musics/$id.ogg")
+    currentMusic = id
+    lastMusicCheck = RenderEngine.time
+  }
+
   def loadLevel(id: String, reloadMusic: Boolean = false): Unit = {
     level = LevelLoader.load(id)
+    isPaused = false
     player = new EntityPlayer
     level spawn player
 
     player setPos level.spawnpoint
 
     if(reloadMusic && level.music != null) {
-      //  soundManager.play("musics/"+level.music+".ogg")
+      stopAllSounds()
+      playMusic(level.music)
+    }
+  }
+
+  def stopAllSounds() = {
+    for(sound <- soundManager.activeSounds) {
+      val source = sound._2
+      sound._2.getChannel.stop()
+      soundManager.stop(source.getName)
     }
   }
 
@@ -104,7 +132,8 @@ object Game extends GameBase("Baguettes") {
     player setPos level.spawnpoint
 
     if(reloadMusic && level.music != null) {
-    //  soundManager.play("musics/"+level.music+".ogg")
+      stopAllSounds()
+      playMusic(level.music)
     }
   }
 

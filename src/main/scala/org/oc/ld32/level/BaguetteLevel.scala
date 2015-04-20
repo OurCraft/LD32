@@ -10,6 +10,8 @@ import org.oc.ld32.maths.AABB
 
 class BaguetteLevel(name: String) extends Level {
 
+  var nextID: String = null
+
   var numberEnemies = 0
 
   var music: String = null
