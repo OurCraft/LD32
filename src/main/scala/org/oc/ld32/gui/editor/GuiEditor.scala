@@ -1,18 +1,16 @@
 package org.oc.ld32.gui.editor
 
 import java.io._
-import java.util
+import java.util.{ArrayList, HashMap, List, Map, Stack}
 
 import com.google.gson.stream.JsonWriter
 import org.lengine.maths.Vec2f
-import org.lengine.render.{Sprite, TextureRegion, TextureAtlas}
+import org.lengine.render.{Sprite, TextureAtlas, TextureRegion}
 import org.lwjgl.input.Keyboard
 import org.oc.ld32.Game
 import org.oc.ld32.gui._
-import java.util.{List, ArrayList, Map, HashMap, Stack}
-
 import org.oc.ld32.input.gamepad.Controls
-import org.oc.ld32.level.{LevelLoader, FloorDecoration, Wall}
+import org.oc.ld32.level.{FloorDecoration, Wall}
 import org.oc.ld32.render.Animation
 
 import scala.collection.JavaConversions._
@@ -580,7 +578,7 @@ class GuiEditor extends GuiScreen {
             val writer = new StringWriter
             writeLevel(writer)
             Game.loadRawLevel(writer.getBuffer.toString)
-            Game.displayGuiScreen(new GuiIngame)
+            Game.displayGuiScreen(new GuiIngame(this))
           }
 
           case SAVE => {

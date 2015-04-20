@@ -11,6 +11,8 @@ import org.oc.ld32.Game
 import scala.collection.JavaConversions._
 
 object KeyControls {
+
+  var pause: Int = Keyboard.KEY_ESCAPE
   var retry: Int = Keyboard.KEY_R
   var confirm: Int = Keyboard.KEY_RETURN
   var left: Int = Keyboard.KEY_LEFT

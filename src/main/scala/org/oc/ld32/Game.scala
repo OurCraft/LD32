@@ -19,11 +19,12 @@ object Game extends GameBase("Baguettes") {
   var player: EntityPlayer = _
   var currentGui: GuiScreen = _
   var usingGamepad = false
+  var isPaused = false
 
   override def getBaseHeight: Int = 640
 
   override def update(delta: Float): Unit = {
-    if (level != null) {
+    if (level != null && !isPaused) {
       level.update(delta)
 
       if (!usingGamepad) {
@@ -197,4 +198,8 @@ object Game extends GameBase("Baguettes") {
     println(s"pov x $value")
     usingGamepad = true
   }
+
+  def pause() = isPaused = true
+
+  def resume() = isPaused = false
 }
