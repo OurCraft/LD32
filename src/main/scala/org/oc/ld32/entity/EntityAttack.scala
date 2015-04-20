@@ -17,6 +17,8 @@ class EntityAttack(owner: EntityBiped, x: Float, y: Float, w: Float, h: Float) e
   override def init: Unit = {
     super.init
     setPos(new Vec2f(x,y))
+    boundingBox.x = x
+    boundingBox.y = y
     boundingBox.width = w
     boundingBox.height = h
   }
@@ -34,6 +36,7 @@ class EntityAttack(owner: EntityBiped, x: Float, y: Float, w: Float, h: Float) e
   }
 
   override def onCollide(other: BaguetteEntity): Unit = {
+    println(other)
     if (other != owner) {
       other match {
         case biped: EntityBiped => {

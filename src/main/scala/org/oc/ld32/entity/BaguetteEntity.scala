@@ -21,6 +21,8 @@ abstract class BaguetteEntity extends Entity {
   override def update(delta: Float): Unit = {
     lastX = getPos.x
     lastY = getPos.y
+    boundingBox.x = getPos.x
+    boundingBox.y = getPos.y
   }
 
   def moving: Boolean = {

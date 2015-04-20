@@ -25,11 +25,11 @@ class EntityPlayer extends EntityBiped("player", 30f) {
   }
 
   override def getAttackRange(): Float = {
-    val multiplier = 4f
+    val multiplier = 1f
     if(baguetteCompletion != 0f)
-      return attackRange*multiplier + (baguetteCompletion * attackRange*multiplier)
+      attackRange*multiplier + (baguetteCompletion * attackRange/multiplier)
     else
-      super.getAttackRange()*multiplier
+      attackRange*multiplier
   }
 
 }
