@@ -22,7 +22,7 @@ void main() {
     float minFactor = 0.05;
     float maxFactor = 0.20;
 
-    float totalLineNumber = screenSize.y/1.5;
+    float totalLineNumber = screenSize.y/5;
 
     float y = int(texCoords0.y * totalLineNumber)/totalLineNumber;
     float factor = rand(vec2(0,y)*(time)) * (maxFactor-minFactor) + minFactor;
