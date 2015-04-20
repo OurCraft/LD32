@@ -29,7 +29,7 @@ object Game extends GameBase("Baguettes") {
   override def update(delta: Float): Unit = {
     if(RenderEngine.time - lastMusicCheck >= 1f/20f) {
       lastMusicCheck = RenderEngine.time
-      if (currentMusic != null && !soundManager.activeSounds.containsKey(s"musics/$currentMusic.ogg")) {
+      if (currentMusic != null && !soundManager.activeSounds.containsKey(s"musics/$currentMusic.wav")) {
         println("relaunching")
         playMusic(currentMusic)
       }
@@ -97,7 +97,7 @@ object Game extends GameBase("Baguettes") {
   }
 
   def playMusic(id: String): Unit = {
-    soundManager.play(s"musics/$id.ogg")
+   // soundManager.play(s"musics/$id.wav")
     currentMusic = id
     lastMusicCheck = RenderEngine.time
   }
