@@ -95,14 +95,17 @@ object Game extends GameBase("Baguettes") {
     camera = new Camera
   }
 
-  def playMusic(id: String): Unit = this.playSound(s"musics/$id.ogg", true)
-
-  def playSound(id: String, loop: Boolean = false): Unit = {
-    val url = ClassLoader.getSystemResource("assets/sounds/" + id)
+  def playMusic(id: String, loop: Boolean = false): Unit = {
+    val url = getClass.getResource(s"/assets/sounds/musics/$id.ogg")
     soundManager.stop("music")
     soundManager.play(url, "music", loop)
     currentMusic = id
     lastMusicCheck = RenderEngine.time
+  }
+
+  def playSound(id: String, loop: Boolean = false): Unit = {
+    val url = getClass.getResource("/assets/sounds/" + id)
+    soundManager.play(url, id, loop)
   }
 
   def loadLevel(id: String, reloadMusic: Boolean = false): Unit = {

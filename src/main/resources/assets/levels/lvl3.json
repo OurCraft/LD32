@@ -107,6 +107,8 @@
         }
     ],
 
+    "followingLevel": "lvl4",
+
     "music": "Hanging On - BlitzEcho"
 
 }

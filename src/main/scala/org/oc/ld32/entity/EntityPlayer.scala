@@ -33,11 +33,4 @@ class EntityPlayer extends EntityBiped("player", 30f) {
       attackRange*multiplier
   }
 
-
-  override def die(): Unit =
-  {
-    Game.playSound("die.ogg")
-    super.die()
-  }
-
 }
