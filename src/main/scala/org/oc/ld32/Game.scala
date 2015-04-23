@@ -46,7 +46,7 @@ object Game extends GameBase("Baguettes") {
           if (isKeyPressed(KeyControls.down)) {
             player.walkDown(delta)
           }
-          val mousePos = player.getPos - new Vec2f(Mouse.getX, Mouse.getY)
+          val mousePos = - camera.pos + player.getPos - new Vec2f(Mouse.getX, Mouse.getY)
           player.setAngle(Math.atan2(mousePos.y, mousePos.x).toFloat)
 
           if(Mouse.isButtonDown(0) && !player.isDead()) {
